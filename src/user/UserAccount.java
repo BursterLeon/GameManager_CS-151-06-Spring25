@@ -3,10 +3,11 @@ package user;
 import java.io.*;
 import java.util.*;
 
+import javafx.scene.control.Alert;
 import utils.*;
 
 public class UserAccount {
-    private Map <String, User> userMap;
+    private HashMap <String, User> userMap;
 
     public UserAccount() {
         userMap = new HashMap<>();
@@ -14,12 +15,29 @@ public class UserAccount {
     }
 
     public void newUser (String username, String password, int highScore) {
-        if (!userMap.containsKey(username) && !utility.Utility.isNullOrWhiteSpace(username)) {
+        if (!userMap.containsKey(username) && !utility.Utility.isNullOrWhiteSpace(username) && !utility.Utility.isNullOrWhiteSpace(password)) {
              userMap.put(username, new User(username, password, highScore));
+
+             //message, that the user has been added
+             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("User successfully created!");
+            alert.showAndWait();
+        }
+        else {
+            //message, that the user has not been added
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("User not created!");
+            alert.showAndWait();
         }
     }
 
-    //reads out the user_accounts.txt file (BufferedReader is closed automatically at the end)
+    //reads out the user_accounts.txt file
+    //adds every key (name) and value (user) to the HashMap
+    // (BufferedReader is closed automatically at the end)
     public void getUsersFromFile () {
         try (BufferedReader reader = new BufferedReader(new FileReader("src/user/user_accounts.txt")) )
         {

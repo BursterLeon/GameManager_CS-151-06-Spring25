@@ -1,5 +1,7 @@
 package user;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -7,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
+import user.*;
+import utils.*;
 
 public class LoginScreen {
     private VBox vBox;
@@ -27,6 +32,16 @@ public class LoginScreen {
         passwordField = new TextField();
         highScoreField = new TextField();
         loginButton = new Button("Login");
+        loginButton.setOnAction (new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String name = nameField.getText();
+                String password = passwordField.getText();
+                int highScore = utility.Utility.isValidInt(highScoreField.getText())?Integer.parseInt(highScoreField.getText()):0;
+                UserAccount userAccount = new UserAccount();
+                userAccount.newUser(name,password,highScore);
+            }
+        });
 
         vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,highScoreLabel,highScoreField,loginButton);
 
