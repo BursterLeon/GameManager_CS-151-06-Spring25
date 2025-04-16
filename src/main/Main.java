@@ -6,19 +6,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import user.*;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Label label = new Label("Hello, JavaFX!");
+        LoginScreen loginScreen = new LoginScreen();
 
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().add(label);
-
-        Scene scene = new Scene(stackPane, 500,500);
+        Scene scene = new Scene(loginScreen.getVBox(), 500,500);
 
         // Set up and display the stage
-        primaryStage.setTitle("Java FX");
+        primaryStage.setTitle("GameManager");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
