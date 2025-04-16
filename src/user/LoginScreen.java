@@ -23,7 +23,7 @@ public class LoginScreen {
     private TextField passwordField;
     private TextField highScoreField;
     private Button loginButton;
-    private Button end;
+    private Button endButton;
 
     public LoginScreen() {
         UserAccount userAccount = new UserAccount();
@@ -46,8 +46,8 @@ public class LoginScreen {
             }
         });
 
-        end = new Button("Exit");
-        end.setOnAction(new EventHandler<ActionEvent>() {
+        endButton = new Button("Exit");
+        endButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 userAccount.writeToFile();
@@ -55,7 +55,7 @@ public class LoginScreen {
             }
         });
 
-        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,highScoreLabel,highScoreField,loginButton);
+        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,highScoreLabel,highScoreField,loginButton, endButton);
 
         vBox.setPadding(new Insets(20));
         vBox.setAlignment(Pos.TOP_LEFT);
