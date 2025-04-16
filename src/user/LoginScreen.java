@@ -1,5 +1,6 @@
 package user;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,8 +23,11 @@ public class LoginScreen {
     private TextField passwordField;
     private TextField highScoreField;
     private Button loginButton;
+    private Button end;
 
     public LoginScreen() {
+        UserAccount userAccount = new UserAccount();
+
         vBox = new VBox(20);
         nameLabel = new Label("Enter your name:");
         passwordLabel = new Label("Enter your password:");
@@ -38,8 +42,16 @@ public class LoginScreen {
                 String name = nameField.getText();
                 String password = passwordField.getText();
                 int highScore = utility.Utility.isValidInt(highScoreField.getText())?Integer.parseInt(highScoreField.getText()):0;
-                UserAccount userAccount = new UserAccount();
                 userAccount.newUser(name,password,highScore);
+            }
+        });
+
+        end = new Button("Exit");
+        end.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                userAccount.writeToFile();
+                Platform.exit();
             }
         });
 
