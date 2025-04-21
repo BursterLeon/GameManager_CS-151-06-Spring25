@@ -6,12 +6,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
-import user.*;
+import javafx.stage.Stage;
 import utils.*;
 
 public class LoginScreen {
@@ -24,9 +24,12 @@ public class LoginScreen {
     private TextField highScoreField;
     private Button loginButton;
     private Button endButton;
+    private UserAccount userAccount;
+    private Stage primaryStage;
 
-    public LoginScreen() {
-        UserAccount userAccount = new UserAccount();
+    public LoginScreen(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        userAccount = new UserAccount();
 
         vBox = new VBox(20);
         nameLabel = new Label("Enter your name:");
@@ -36,13 +39,38 @@ public class LoginScreen {
         passwordField = new TextField();
         highScoreField = new TextField();
         loginButton = new Button("Login");
-        loginButton.setOnAction (new EventHandler<ActionEvent>() {
+        loginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String name = nameField.getText();
-                String password = passwordField.getText();
-                int highScore = utility.Utility.isValidInt(highScoreField.getText())?Integer.parseInt(highScoreField.getText()):0;
-                userAccount.newUser(name,password,highScore);
+                String name = nameField.getText().trim();
+                String password = passwordField.getText().trim();
+                int highScore = utility.Utility.isValidInt(highScoreField.getText()) ? Integer.parseInt(highScoreField.getText()) : 0;
+
+                // Validate input
+                if (name.isEmpty() || password.isEmpty()) {
+                    Label errorLabel = new Label("Name and password cannot be empty!");
+                    errorLabel.setStyle("-fx-text-fill: red;");
+                    if (!vBox.getChildren().contains(errorLabel)) {
+                        vBox.getChildren().add(vBox.getChildren().indexOf(loginButton), errorLabel);
+                    }
+                    return;
+                }
+
+                // Create user
+                try {
+                    userAccount.newUser(name, password, highScore);
+                } catch (Exception e) {
+                    Label errorLabel = new Label("Error creating user: " + e.getMessage());
+                    errorLabel.setStyle("-fx-text-fill: red;");
+                    vBox.getChildren().add(errorLabel);
+                    return;
+                }
+
+                // Switch to Blackjack game
+                Blackjack blackjackGame = new Blackjack(name, highScore);
+                Scene gameScene = new Scene(blackjackGame.getRoot(), 800, 600);
+                primaryStage.setScene(gameScene);
+                primaryStage.setTitle("Blackjack - Welcome, " + name);
             }
         });
 
@@ -55,7 +83,7 @@ public class LoginScreen {
             }
         });
 
-        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,highScoreLabel,highScoreField,loginButton, endButton);
+        vBox.getChildren().addAll(nameLabel, nameField, passwordLabel, passwordField, highScoreLabel, highScoreField, loginButton, endButton);
 
         vBox.setPadding(new Insets(20));
         vBox.setAlignment(Pos.TOP_LEFT);
@@ -65,6 +93,7 @@ public class LoginScreen {
             VBox.setMargin(node, new Insets(5));
         }
     }
+
     public VBox getVBox() {
         return vBox;
     }
