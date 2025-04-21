@@ -15,7 +15,7 @@ public class UserAccount {
     }
 
     public void newUser (String username, String password) {
-        if (!userMap.containsKey(username) && !utility.Utility.isNullOrWhiteSpace(username) && !utility.Utility.isNullOrWhiteSpace(password)) {
+        if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
              userMap.put(username, new User(username, password));
 
              //message, that the user has been added
@@ -25,30 +25,17 @@ public class UserAccount {
             alert.setContentText("User successfully created!");
             alert.showAndWait();
         }
-        if (utility.Utility.isNullOrWhiteSpace(username) && utility.Utility.isNullOrWhiteSpace(password)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username and password is required!");
+        else if (Utility.isNullOrWhiteSpace(username) && Utility.isNullOrWhiteSpace(password)) {
+                errorWindow("Username and password is required!");
             }
-        if (utility.Utility.isNullOrWhiteSpace(username)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username is required!");
+        else if (Utility.isNullOrWhiteSpace(username)) {
+                errorWindow("Username is required!");
             }
-        if (utility.Utility.isNullOrWhiteSpace(password)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Password is required!");
+        else if (userMap.containsKey(username)) {
+                errorWindow("Username already exists!");
             }
-        if (userMap.containsKey(username)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Username already exists!");
-                alert.showAndWait();
+        else if (Utility.isNullOrWhiteSpace(password)) {
+                errorWindow("Password is required!");
             }
 //                //message, that the user has not been added
 //                Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -129,4 +116,11 @@ public class UserAccount {
             }
         }
     }
+    private void errorWindow(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
 }

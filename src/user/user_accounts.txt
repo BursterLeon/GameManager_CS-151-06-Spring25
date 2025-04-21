@@ -1,7 +1,10 @@
 perfect,perfect,0
 test555555,test555555,0
+ende4,ende4,0
 exitTest,exitTest,0
+ende2,ende2,0
 perfect2,perfect2,0
+ende3,ende3,0
 test 1,test1,0
 dfsdsa,dasfdfasfads,0
 jooooo,jooooo,0
