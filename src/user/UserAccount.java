@@ -11,12 +11,12 @@ public class UserAccount {
 
     public UserAccount() {
         userMap = new HashMap<>();
-        getUsersFromFile();
+        this.getUsersFromFile();
     }
 
-    public void newUser (String username, String password, int highScore) {
-        if (!userMap.containsKey(username) && !utility.Utility.isNullOrWhiteSpace(username) && !utility.Utility.isNullOrWhiteSpace(password)) {
-             userMap.put(username, new User(username, password, highScore));
+    public void newUser (String username, String password) {
+        if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
+             userMap.put(username, new User(username, password));
 
              //message, that the user has been added
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -25,14 +25,24 @@ public class UserAccount {
             alert.setContentText("User successfully created!");
             alert.showAndWait();
         }
-        else {
-            //message, that the user has not been added
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("User not created!");
-            alert.showAndWait();
-        }
+        else if (Utility.isNullOrWhiteSpace(username) && Utility.isNullOrWhiteSpace(password)) {
+                errorWindow("Username and password is required!");
+            }
+        else if (Utility.isNullOrWhiteSpace(username)) {
+                errorWindow("Username is required!");
+            }
+        else if (userMap.containsKey(username)) {
+                errorWindow("Username already exists!");
+            }
+        else if (Utility.isNullOrWhiteSpace(password)) {
+                errorWindow("Password is required!");
+            }
+//                //message, that the user has not been added
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Error");
+//                alert.setHeaderText(null);
+//                alert.setContentText("User not created!");
+//                alert.showAndWait();
     }
 
     //reads out the user_accounts.txt file
@@ -48,10 +58,10 @@ public class UserAccount {
                 String[] lines = line.split(",");
                 String name = lines [0];
                 String password = lines [1];
-                int score = Integer.parseInt(lines[2]);
+                int highScore = Integer.parseInt(lines[2]);
 
                 //adds the name as the key and the user object as a value to the userMap
-                userMap.put(name, new User(name, password, score));
+                userMap.put(name, new User(name, password, highScore));
 
                 //read new line from the file
                 line = reader.readLine();
@@ -75,4 +85,42 @@ public class UserAccount {
             throw new RuntimeException(e);
         }
     }
+
+    public void loginValidation (String username, String password) {
+        if (!this.userMap.containsKey(username)) {
+            //message, that the user has not been added
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("User doesn't exist!");
+            alert.showAndWait();
+        }
+        else {
+            User user = this.userMap.get(username);
+            if (!user.getPassword().equals(password)) {
+                //message, that the user has not been added
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Wrong password!");
+            alert.showAndWait();
+            }
+            else {
+                if (user.getPassword().equals(password)) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText(null);
+                    alert.setContentText("User successfully logged in!");
+                    alert.showAndWait();
+                }
+            }
+        }
+    }
+    private void errorWindow(String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
 }

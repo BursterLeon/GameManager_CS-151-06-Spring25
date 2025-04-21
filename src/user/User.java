@@ -5,6 +5,11 @@ public class User {
     private String password;
     private int highScore;
 
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.highScore = 0;
+    }
     public User(String name, String password, int highScore) {
         this.name = name;
         this.password = password;
