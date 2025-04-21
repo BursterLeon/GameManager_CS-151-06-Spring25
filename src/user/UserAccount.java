@@ -75,4 +75,35 @@ public class UserAccount {
             throw new RuntimeException(e);
         }
     }
+
+    public void loginValidation (String username, String password) {
+        if (!this.userMap.containsKey(username)) {
+            //message, that the user has not been added
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("User doesn't exist!");
+            alert.showAndWait();
+        }
+        else {
+            User user = this.userMap.get(username);
+            if (!user.getPassword().equals(password)) {
+                //message, that the user has not been added
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Wrong password!");
+            alert.showAndWait();
+            }
+            else {
+                if (user.getPassword().equals(password)) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText(null);
+                    alert.setContentText("User successfully logged in!");
+                    alert.showAndWait();
+                }
+            }
+        }
+    }
 }

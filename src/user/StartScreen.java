@@ -37,6 +37,9 @@ public class StartScreen {
         passwordField = new TextField();
 
         loginButton = new Button("Login");
+        loginButton.setOnAction((ActionEvent event) -> {
+            userAccount.loginValidation(nameField.getText(), passwordField.getText());
+        });
 
         createAccountButton = new Button("Create Account");
         createAccountButton.setOnAction((ActionEvent event) -> {
