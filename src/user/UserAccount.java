@@ -25,14 +25,37 @@ public class UserAccount {
             alert.setContentText("User successfully created!");
             alert.showAndWait();
         }
-        else {
-            //message, that the user has not been added
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("User not created!");
-            alert.showAndWait();
-        }
+        if (utility.Utility.isNullOrWhiteSpace(username) && utility.Utility.isNullOrWhiteSpace(password)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username and password is required!");
+            }
+        if (utility.Utility.isNullOrWhiteSpace(username)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username is required!");
+            }
+        if (utility.Utility.isNullOrWhiteSpace(password)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Password is required!");
+            }
+        if (userMap.containsKey(username)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Username already exists!");
+                alert.showAndWait();
+            }
+//                //message, that the user has not been added
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Error");
+//                alert.setHeaderText(null);
+//                alert.setContentText("User not created!");
+//                alert.showAndWait();
     }
 
     //reads out the user_accounts.txt file

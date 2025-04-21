@@ -27,14 +27,16 @@ public class StartScreen {
     private Button createAccountButton;
     private Button endButton;
 
-    private UserAccount userAccount = new UserAccount();
+    private UserAccount userAccount;
 
-    public StartScreen() {
+    public StartScreen(UserAccount userAccount) {
         vBox = new VBox(20);
         nameLabel = new Label("Enter your name:");
         passwordLabel = new Label("Enter your password:");
         nameField = new TextField();
         passwordField = new TextField();
+
+        this.userAccount = userAccount;
 
         loginButton = new Button("Login");
         loginButton.setOnAction((ActionEvent event) -> {
@@ -44,6 +46,8 @@ public class StartScreen {
         createAccountButton = new Button("Create Account");
         createAccountButton.setOnAction((ActionEvent event) -> {
             System.out.println("Create Account button clicked");
+            nameField.clear();
+            passwordField.clear();
             CreateAccount createAccount = new CreateAccount(this.userAccount);
         });
 

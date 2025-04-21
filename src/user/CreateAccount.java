@@ -40,7 +40,7 @@ public class CreateAccount {
         nameField = new TextField();
         passwordField = new TextField();
 
-        createAccountButton = new Button("Login");
+        createAccountButton = new Button("Create Account");
         createAccountButton.setOnAction (new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
