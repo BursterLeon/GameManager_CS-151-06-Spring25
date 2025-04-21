@@ -11,12 +11,12 @@ public class UserAccount {
 
     public UserAccount() {
         userMap = new HashMap<>();
-        getUsersFromFile();
+        this.getUsersFromFile();
     }
 
-    public void newUser (String username, String password, int highScore) {
+    public void newUser (String username, String password) {
         if (!userMap.containsKey(username) && !utility.Utility.isNullOrWhiteSpace(username) && !utility.Utility.isNullOrWhiteSpace(password)) {
-             userMap.put(username, new User(username, password, highScore));
+             userMap.put(username, new User(username, password));
 
              //message, that the user has been added
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -48,10 +48,10 @@ public class UserAccount {
                 String[] lines = line.split(",");
                 String name = lines [0];
                 String password = lines [1];
-                int score = Integer.parseInt(lines[2]);
+                int highScore = Integer.parseInt(lines[2]);
 
                 //adds the name as the key and the user object as a value to the userMap
-                userMap.put(name, new User(name, password, score));
+                userMap.put(name, new User(name, password, highScore));
 
                 //read new line from the file
                 line = reader.readLine();
