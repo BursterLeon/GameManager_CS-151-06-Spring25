@@ -6,47 +6,54 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import user.*;
-import utils.*;
+public class StartScreen {
+    //creates a new UserAccount object
+    //so the data from user_accounts.txt is restored and can be usesd
+    //UserAccount userAccount = new UserAccount();
 
-public class LoginScreen {
     private VBox vBox;
     private Label nameLabel;
     private Label passwordLabel;
-    private Label highScoreLabel;
     private TextField nameField;
     private TextField passwordField;
-    private TextField highScoreField;
     private Button loginButton;
+    private Button createAccountButton;
     private Button endButton;
 
-    public LoginScreen() {
-        UserAccount userAccount = new UserAccount();
+    private UserAccount userAccount;
 
+    public StartScreen(UserAccount userAccount) {
         vBox = new VBox(20);
         nameLabel = new Label("Enter your name:");
         passwordLabel = new Label("Enter your password:");
-        highScoreLabel = new Label("High score:");
         nameField = new TextField();
         passwordField = new TextField();
-        highScoreField = new TextField();
+
+        this.userAccount = userAccount;
+
         loginButton = new Button("Login");
-        loginButton.setOnAction (new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String name = nameField.getText();
-                String password = passwordField.getText();
-                int highScore = utility.Utility.isValidInt(highScoreField.getText())?Integer.parseInt(highScoreField.getText()):0;
-                userAccount.newUser(name,password,highScore);
-            }
+        loginButton.setOnAction((ActionEvent event) -> {
+            userAccount.loginValidation(nameField.getText(), passwordField.getText());
+        });
+
+        createAccountButton = new Button("Create Account");
+        createAccountButton.setOnAction((ActionEvent event) -> {
+            System.out.println("Create Account button clicked");
+            nameField.clear();
+            passwordField.clear();
+            CreateAccount createAccount = new CreateAccount(this.userAccount);
         });
 
         endButton = new Button("Exit");
+        //writes everything from the map to the file user_accounts.txt
+        //ends the program
         endButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -55,8 +62,9 @@ public class LoginScreen {
             }
         });
 
-        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,highScoreLabel,highScoreField,loginButton, endButton);
+        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,loginButton,createAccountButton,endButton);
 
+        //FORMATTING
         vBox.setPadding(new Insets(20));
         vBox.setAlignment(Pos.TOP_LEFT);
         vBox.setSpacing(10);
@@ -65,6 +73,7 @@ public class LoginScreen {
             VBox.setMargin(node, new Insets(5));
         }
     }
+
     public VBox getVBox() {
         return vBox;
     }
