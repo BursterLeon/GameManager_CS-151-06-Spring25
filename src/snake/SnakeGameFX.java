@@ -3,6 +3,7 @@ package snake;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,6 +14,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import user.User;
+import user.UserAccount;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -34,11 +37,24 @@ public class SnakeGameFX extends Application {
     private boolean gameOver = false;
     private boolean paused = false;
     private int score = 0;
+
+
+    private UserAccount userAccount;
+    private int userHighscore;
+
+
     private int highScore = 0;
     private int speed = INITIAL_SPEED;
     private Timeline timeline;
     private Random random = new Random();
     private GraphicsContext gc;
+
+    //constructor takes the saved highscore from the currently logged-in user
+    public SnakeGameFX(UserAccount userAccount) {
+        this.userAccount = userAccount;
+        userHighscore = userAccount.getCurrentLoggedInUserHighScore();
+        this.highScore = userAccount.getCurrentLoggedInUserHighScore();
+    }
 
     @Override
     public void start(Stage stage) {
@@ -88,6 +104,15 @@ public class SnakeGameFX extends Application {
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+        //make sure that the current MaxHighscore is saved, when the user closes the window or program
+        stage.setOnCloseRequest(event -> {
+            if (highScore > userHighscore) {
+                userAccount.changeUserHighScore(highScore);
+            }
+            userAccount.writeToFile();
+            Platform.exit();
+        });
     }
 
     private void initializeGame() {
