@@ -17,7 +17,7 @@ public class GameWindow extends GameManagerWindow {
 
         snakeButton = new Button("snake");
         snakeButton.setOnAction(e -> {
-            new snake.SnakeGameFX().start(new Stage());
+            new snake.SnakeGameFX(userAccount).start(new Stage());
         });
 
         blackJackButton = new Button("Black Jack");
