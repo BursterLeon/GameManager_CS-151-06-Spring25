@@ -6,17 +6,17 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import window.GameWindow;
+import window.WindowManager;
 
 public class StartScreen {
     //creates a new UserAccount object
     //so the data from user_accounts.txt is restored and can be usesd
-    //UserAccount userAccount = new UserAccount();
 
     private VBox vBox;
     private Label nameLabel;
@@ -41,6 +41,9 @@ public class StartScreen {
         loginButton = new Button("Login");
         loginButton.setOnAction((ActionEvent event) -> {
             userAccount.loginValidation(nameField.getText(), passwordField.getText());
+//            GameWindow gameWindow = new GameWindow(userAccount);
+            if (userAccount.getLoggedIn())
+                WindowManager.openWindow(new GameWindow(userAccount),"GameWindow");
         });
 
         createAccountButton = new Button("Create Account");
@@ -48,7 +51,9 @@ public class StartScreen {
             System.out.println("Create Account button clicked");
             nameField.clear();
             passwordField.clear();
-            CreateAccount createAccount = new CreateAccount(this.userAccount);
+//            CreateAccountWindow createAccountWindow = new CreateAccountWindow(userAccount);
+            //deleted the line to avoid creating more and more objects of CreateAccountWindow
+            WindowManager.openWindow(new CreateAccountWindow(userAccount), "CreateAccountWindow");
         });
 
         endButton = new Button("Exit");
