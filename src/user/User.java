@@ -25,4 +25,9 @@ public class User {
     public int getHighScore() {
         return highScore;
     }
+
+    @Override
+    public String toString() {
+        return "User: " + name + ", Password: " + password + ", HighScore: " + highScore;
+    }
 }
