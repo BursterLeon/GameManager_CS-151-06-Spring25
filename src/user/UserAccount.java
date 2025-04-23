@@ -16,6 +16,9 @@ public class UserAccount {
     }
 
     private int currentLoggedInUserHighScore;
+    public int getCurrentLoggedInUserHighScore() {
+        return currentLoggedInUserHighScore;
+    }
     public void setCurrentLoggedInUserHighScore(int currentLoggedInUserHighScore) {
         this.currentLoggedInUserHighScore = currentLoggedInUserHighScore;
     }
@@ -140,6 +143,9 @@ public class UserAccount {
                 }
             }
         }
+    }
+    public void changeUserHighScore (int newHighScore) {
+        userMap.get(currentLoggedInUser.getName()).setHighscore(newHighScore);
     }
     private void errorWindow(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
