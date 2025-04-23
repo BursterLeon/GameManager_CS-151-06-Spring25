@@ -26,6 +26,10 @@ public class User {
         return highScore;
     }
 
+    public void setHighscore(int highScore) {
+        this.highScore = highScore;
+    }
+
     @Override
     public String toString() {
         return "User: " + name + ", Password: " + password + ", HighScore: " + highScore;
