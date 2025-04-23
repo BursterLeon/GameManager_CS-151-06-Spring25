@@ -1,76 +1,56 @@
 package user;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
-import utils.*;
+import window.GameManagerWindow;
+import window.WindowManager;
 
-public class CreateAccount {
-    private VBox vBox;
+public class CreateAccountWindow extends GameManagerWindow {
     private Label nameLabel;
     private Label passwordLabel;
     private TextField nameField;
     private TextField passwordField;
     private Button createAccountButton;
-    private Button endButton;
+    private Button returnButton;
 
-    private UserAccount userAccount;
+//    private Stage stage;
 
-    private Stage stage;
+    public CreateAccountWindow(UserAccount userAccount) {
+        super(userAccount);
 
-    public CreateAccount(UserAccount userAccount) {
-        this.userAccount = userAccount;
-
-        stage = new Stage();
-        stage.setTitle("Create Account");
-
-        vBox = new VBox(20);
         nameLabel = new Label("Enter your name:");
         passwordLabel = new Label("Enter your password:");
         nameField = new TextField();
         passwordField = new TextField();
 
         createAccountButton = new Button("Create Account");
-        createAccountButton.setOnAction (new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        createAccountButton.setOnAction (e -> {
                 String name = nameField.getText();
                 String password = passwordField.getText();
                 //int highScore = utility.Utility.isValidInt(highScoreField.getText())?Integer.parseInt(highScoreField.getText()):0;
                 userAccount.newUser(name,password);
                 nameField.clear();
                 passwordField.clear();
-                stage.close();
-            }
+                WindowManager.closeWindow(this);
         });
 
+        returnButton = new Button("Return");
+        returnButton.setOnAction (e -> {
+            WindowManager.closeWindow(this);
+        });
 
-        vBox.getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,createAccountButton);
+        super.getVBox().getChildren().addAll(nameLabel,nameField,passwordLabel,passwordField,createAccountButton,returnButton);
 
-        //FORMATTING
-        vBox.setPadding(new Insets(20));
-        vBox.setAlignment(Pos.TOP_LEFT);
-        vBox.setSpacing(10);
-
-        for (Node node : vBox.getChildren()) {
+        for (Node node : super.getVBox().getChildren()) {
             VBox.setMargin(node, new Insets(5));
         }
-
-        Scene scene = new Scene(this.getVBox(), 500,500);
-        stage.setScene(scene);
-        stage.show();
-    }
-    public VBox getVBox() {
-        return vBox;
     }
 }
