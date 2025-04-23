@@ -1,7 +1,5 @@
-package user;
+package window;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -9,9 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import javafx.stage.Stage;
-import window.GameManagerWindow;
-import window.WindowManager;
+import user.UserAccount;
 
 public class CreateAccountWindow extends GameManagerWindow {
     private Label nameLabel;
@@ -20,8 +16,6 @@ public class CreateAccountWindow extends GameManagerWindow {
     private TextField passwordField;
     private Button createAccountButton;
     private Button returnButton;
-
-//    private Stage stage;
 
     public CreateAccountWindow(UserAccount userAccount) {
         super(userAccount);
