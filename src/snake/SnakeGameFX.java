@@ -1,4 +1,4 @@
-package Snake;
+package snake;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -249,9 +249,5 @@ public class SnakeGameFX extends Application {
         public int hashCode() {
             return x * 31 + y;
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
