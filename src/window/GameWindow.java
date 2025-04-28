@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import user.UserAccount;
 
+//window that lets the user choose between different games
 public class GameWindow extends GameManagerWindow {
     private Button snakeButton;
     private Button blackJackButton;

@@ -14,6 +14,7 @@ import window.CreateAccountWindow;
 import window.GameWindow;
 import window.WindowManager;
 
+//the first window that opens which lets the user log in
 public class StartScreen {
     //creates a new UserAccount object
     //so the data from user_accounts.txt is restored and can be usesd
@@ -38,6 +39,7 @@ public class StartScreen {
 
         this.userAccount = userAccount;
 
+        //LOGIN
         loginButton = new Button("Login");
         loginButton.setOnAction((ActionEvent event) -> {
             userAccount.loginValidation(nameField.getText(), passwordField.getText());
@@ -48,6 +50,7 @@ public class StartScreen {
                 WindowManager.openWindow(new GameWindow(userAccount),"GameWindow");
         });
 
+        //CREATE ACCOUNT
         createAccountButton = new Button("Create Account");
         createAccountButton.setOnAction((ActionEvent event) -> {
             System.out.println("Create Account button clicked");

@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import user.UserAccount;
 
+// superclass for all windows in the game manager, except for the games
 public class GameManagerWindow {
     private VBox vBox;
     private UserAccount userAccount;
