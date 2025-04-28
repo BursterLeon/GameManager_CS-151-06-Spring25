@@ -6,6 +6,7 @@ import java.util.*;
 import javafx.scene.control.Alert;
 import utils.*;
 
+//this class handles everything related to the user
 public class UserAccount {
     private HashMap <String, User> userMap;
 
@@ -39,7 +40,7 @@ public class UserAccount {
 
     public void newUser (String username, String password) {
         if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
-             userMap.put(username, new User(username, password));
+             userMap.put(username, new User(username, Utility.hashingPassword(password)));
 
              //message, that the user has been added
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -121,7 +122,7 @@ public class UserAccount {
         else {
             //returns the user that is saved in the HashMap with the given username and assigns it to user
             User user = this.userMap.get(username);
-            if (!user.getPassword().equals(password)) {
+            if (!user.getPassword().equals(Utility.hashingPassword(password))) {
                 //message, that the user has not been added
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -130,7 +131,7 @@ public class UserAccount {
             alert.showAndWait();
             }
             else {
-                if (user.getPassword().equals(password)) {
+                if (user.getPassword().equals(Utility.hashingPassword(password))) {
                     this.setCurrentLoggedInUser(user);
                     setCurrentLoggedInUserHighScore(user.getHighScore());
                     loggedIn = true;

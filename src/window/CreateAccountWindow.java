@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 
 import user.UserAccount;
 
+//window that lets the user create an account
 public class CreateAccountWindow extends GameManagerWindow {
     private Label nameLabel;
     private Label passwordLabel;

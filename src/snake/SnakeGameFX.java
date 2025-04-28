@@ -75,6 +75,14 @@ public class SnakeGameFX extends Application {
                 if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
                     initializeGame();
                 }
+                //ESC lets the user return to the game window
+                if(e.getCode() == KeyCode.ESCAPE) {
+                    if (highScore > userHighscore) {
+                        userAccount.changeUserHighScore(highScore);
+                    }
+                    userAccount.writeToFile();
+                    stage.close();
+                }
                 return;
             }
 
@@ -111,7 +119,7 @@ public class SnakeGameFX extends Application {
                 userAccount.changeUserHighScore(highScore);
             }
             userAccount.writeToFile();
-            Platform.exit();
+            stage.close();
         });
     }
 
@@ -211,7 +219,7 @@ public class SnakeGameFX extends Application {
         gc.fillText("High Score: " + highScore, WIDTH / 2, HEIGHT / 2 + 40);
 
         gc.setFont(new Font("Arial", 20));
-        gc.fillText("Press ENTER or SPACE to restart", WIDTH / 2, HEIGHT / 2 + 100);
+        gc.fillText("Press ENTER or SPACE to restart, ESC to exit", WIDTH / 2, HEIGHT / 2 + 100);
     }
 
     private void drawPauseScreen() {
