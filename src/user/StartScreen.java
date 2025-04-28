@@ -41,7 +41,9 @@ public class StartScreen {
         loginButton = new Button("Login");
         loginButton.setOnAction((ActionEvent event) -> {
             userAccount.loginValidation(nameField.getText(), passwordField.getText());
-//            GameWindow gameWindow = new GameWindow(userAccount);
+            //resets the 2 textfields
+            nameField.clear();
+            passwordField.clear();
             if (userAccount.getLoggedIn())
                 WindowManager.openWindow(new GameWindow(userAccount),"GameWindow");
         });
