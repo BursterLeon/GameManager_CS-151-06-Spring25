@@ -12,6 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         UserAccount userAccount = new UserAccount();
+
         StartScreen startScreen = new StartScreen(userAccount);
 
         Scene scene = new Scene(startScreen.getVBox(), 500,500);
@@ -33,8 +34,5 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        System.out.println("git branch test");
-        System.out.println();
-        System.out.println();
     }
 }

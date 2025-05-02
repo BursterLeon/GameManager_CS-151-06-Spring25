@@ -6,8 +6,32 @@ import java.util.*;
 import javafx.scene.control.Alert;
 import utils.*;
 
+//this class handles everything related to the user
 public class UserAccount {
     private HashMap <String, User> userMap;
+
+    //the user that is currently logged in
+    private User currentLoggedInUser;
+    public void setCurrentLoggedInUser(User currentLoggedInUser) {
+        this.currentLoggedInUser = currentLoggedInUser;
+    }
+
+    private int currentLoggedInUserHighScore;
+    public int getCurrentLoggedInUserHighScore() {
+        return currentLoggedInUserHighScore;
+    }
+    public void setCurrentLoggedInUserHighScore(int currentLoggedInUserHighScore) {
+        this.currentLoggedInUserHighScore = currentLoggedInUserHighScore;
+    }
+
+    //if a user is logged in, loggedIn is set to true
+    private Boolean loggedIn = false;
+    public Boolean getLoggedIn() {
+        return loggedIn;
+    }
+    public void resetLoggedIn() {
+        loggedIn = false;
+    }
 
     public UserAccount() {
         userMap = new HashMap<>();
@@ -16,7 +40,7 @@ public class UserAccount {
 
     public void newUser (String username, String password) {
         if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
-             userMap.put(username, new User(username, password));
+             userMap.put(username, new User(username, Utility.hashingPassword(password)));
 
              //message, that the user has been added
              Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -96,8 +120,9 @@ public class UserAccount {
             alert.showAndWait();
         }
         else {
+            //returns the user that is saved in the HashMap with the given username and assigns it to user
             User user = this.userMap.get(username);
-            if (!user.getPassword().equals(password)) {
+            if (!user.getPassword().equals(Utility.hashingPassword(password))) {
                 //message, that the user has not been added
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -106,7 +131,11 @@ public class UserAccount {
             alert.showAndWait();
             }
             else {
-                if (user.getPassword().equals(password)) {
+                if (user.getPassword().equals(Utility.hashingPassword(password))) {
+                    this.setCurrentLoggedInUser(user);
+                    setCurrentLoggedInUserHighScore(user.getHighScore());
+                    loggedIn = true;
+                    System.out.println("User logged in: " + user.toString());
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setHeaderText(null);
@@ -115,6 +144,9 @@ public class UserAccount {
                 }
             }
         }
+    }
+    public void changeUserHighScore (int newHighScore) {
+        userMap.get(currentLoggedInUser.getName()).setHighscore(newHighScore);
     }
     private void errorWindow(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
