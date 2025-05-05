@@ -1,4 +1,20 @@
 package blackjack;
+import blackjack.Dealer;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import blackjack.BlackjackMain;
+import blackjack.Human;
+import blackjack.Dealer;
 
 public class BlackjackMain {
 
@@ -17,6 +33,8 @@ public class BlackjackMain {
     public void placeBet() {
 
     }
+
+    //constructor
 
     // All players will play their hand once it's their turn
     public void playTurn() {
@@ -90,7 +108,9 @@ public class BlackjackMain {
     }
 
 
-    public void startGame() {}
+    public void startGame() {
+
+    }
     public void saveGame() {}
     public void exitGame() {}
     public void loadGame(String saveStateString) {}
