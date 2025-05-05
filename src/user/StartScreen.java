@@ -86,5 +86,6 @@ public class StartScreen {
 
     public VBox getVBox() {
         return vBox;
-    }
-}
+    }}
+
+
