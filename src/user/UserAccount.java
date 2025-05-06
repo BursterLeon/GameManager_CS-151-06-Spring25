@@ -38,6 +38,16 @@ public class UserAccount {
         this.getUsersFromFile();
     }
 
+    //returns True if the user with a specific username (Key) exists in the HashMap
+    public boolean userExists(String username) {
+        return userMap.containsKey(username);
+    }
+    //ONLY FOR TESTING
+    public void addUserTest (String username, String password) {
+        if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
+             userMap.put(username, new User(username, Utility.hashingPassword(password)));}
+    }
+
     public void newUser (String username, String password) {
         if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
              userMap.put(username, new User(username, Utility.hashingPassword(password)));
