@@ -10,6 +10,9 @@ import utils.*;
 public class UserAccount {
     private HashMap <String, User> userMap;
 
+    //Maps highscores and users
+    private Map <String,Integer> highscoreMap;
+
     //the user that is currently logged in
     private User currentLoggedInUser;
     public void setCurrentLoggedInUser(User currentLoggedInUser) {
@@ -35,6 +38,7 @@ public class UserAccount {
 
     public UserAccount() {
         userMap = new HashMap<>();
+        highscoreMap = new HashMap<>();
         this.getUsersFromFile();
     }
 
@@ -112,35 +116,57 @@ public class UserAccount {
     //adds every key (name) and value (user) to the HashMap
     // (BufferedReader is closed automatically at the end)
     public void getUsersFromFile () {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/user/user_accounts.txt")) )
+        try (
+                BufferedReader reader = new BufferedReader(new FileReader("src/user/user_accounts.txt"));
+                BufferedReader readerHighScore = new BufferedReader(new FileReader("src/user/high_scores.txt"));
+        )
         {
             String line;
             line = reader.readLine();
-            while(line != null) {
+            String lineHighScore = readerHighScore.readLine();
+            while(line != null && lineHighScore != null) {
                 //lines in file are comma seperated values name, password, highScore
                 String[] lines = line.split(",");
                 String name = lines [0];
                 String password = lines [1];
-                int highScore = Integer.parseInt(lines[2]);
+
+                String[] highScores = lineHighScore.split(",");
+                int highScore = Integer.parseInt(highScores[1]);
 
                 //adds the name as the key and the user object as a value to the userMap
                 userMap.put(name, new User(name, password, highScore));
+                highscoreMap.put(name,highScore);
 
                 //read new line from the file
                 line = reader.readLine();
+                lineHighScore = readerHighScore.readLine();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    //FILE WRITER
     //writes everything from the map to the file user_accounts.txt
     public void writeToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/user/user_accounts.txt")))
         {
             //a collection view of the values contained in this map
             for (User user : userMap.values()) {
-                String line = user.getName() + "," + user.getPassword() + "," + user.getHighScore();
+                String line = user.getName() + "," + user.getPassword();
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void writeToHighScoreFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/user/high_scores.txt")))
+        {
+            //a collection view of the values contained in this map
+            for (User user : userMap.values()) {
+                String line = user.getName() + "," + user.getHighScore();
                 writer.write(line);
                 writer.newLine();
             }
@@ -186,7 +212,25 @@ public class UserAccount {
     }
     public void changeUserHighScore (int newHighScore) {
         userMap.get(currentLoggedInUser.getName()).setHighscore(newHighScore);
+        highscoreMap.put(currentLoggedInUser.getName(),newHighScore);
     }
+
+    public ArrayList<String> getTopHighScore () {
+        ArrayList<String> highScores = new ArrayList<>();
+
+        //to convert Map into List with entries (String and Integer)
+        List<Map.Entry<String, Integer>> scoreList = new ArrayList<>(highscoreMap.entrySet());
+        //sort the List from highest to lowest
+        scoreList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+        //save the top 5 (or less if the list has a size of smaller 5) entries in a new List
+        List<Map.Entry<String, Integer>> topScoreList = scoreList.subList(0, Math.min(5, scoreList.size()));
+
+        for (Map.Entry<String, Integer> entry : topScoreList) {
+            highScores.add(entry.getKey() + ":" + entry.getValue());
+        }
+        return highScores;
+    }
+
     private void errorWindow(String message) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Error");
