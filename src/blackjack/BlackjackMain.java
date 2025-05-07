@@ -151,21 +151,6 @@ public class BlackjackMain {
 
 
     //========== get the image inssde the ressource and display out===========================//
-    private String getCardImagePath(Card card) {
-        String rank = card.getRank().toUpperCase();
-        String suit = card.getSuit().toLowerCase();
-        String fileName = suit + "_" + rank+ ".png";// Call it cause structure the resoure filw name base on Sui + rank to make it match and call
-
-        return "resource/" + fileName;  }
-
-    // End game
-    private void endGame() {
-        hitButton.setDisable(true);
-        standButton.setDisable(true);
-    }
-    public VBox getGameUI() {
-        return gameUI;
-    }
 
     public void saveGame() {}
     public void exitGame() {}

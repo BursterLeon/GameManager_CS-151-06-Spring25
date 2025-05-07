@@ -1,7 +1,7 @@
 package blackjack;
 
 import blackjack.Card;
-import blackjack.Card.Rank;
+//import blackjack.Card.Rank;
 import java.util.List;
 
 public abstract class Player {
