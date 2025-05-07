@@ -1,50 +1,44 @@
 package blackjack;
-public class Card {
-    private String rank;
-    private String suit;
-    private int value;
 
-    public Card(String rank, String suit) {
-        this.rank = rank;
-        this.suit = suit;
-        setValue();
+public class Card {
+
+    public static enum Suit {
+        diamonds, HEARTS, CLUBS, SPADES;
     }
 
-    // Value of each card
-    private void setValue() {
-        switch (rank) {
-            case "A": //A value 11 base on black jack rule
-                value = 11;
-                break;
-            case "K":
-            case "Q":
-            case "J":
-                value = 10;
-                break;
-            default:
-                value = Integer.parseInt(rank);
+    public static enum Rank {
+        TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7),
+        EIGHT(8), NINE(9), TEN(10), JACK(10), QUEEN(10), KING(10),
+        ACE(11);
+        private final int value;
+
+        Rank(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
         }
     }
 
-    // Get and set the value
-    public String getRank() {
-        return rank;
+    private final Suit suit;
+    private final Rank rank;
+
+
+    public Card(Suit suit, Rank rank) {
+        this.suit = suit;
+        this.rank = rank;
     }
 
-    public String getSuit() {
+    public Suit getSuit() {
         return suit;
     }
 
-    public int getValue() {
-        return value;
+    public Rank getRank() {
+        return rank;
     }
 
-    // Override
-    @Override
     public String toString() {
         return rank + " of " + suit;
     }
-
-
 }
-
