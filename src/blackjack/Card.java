@@ -3,13 +3,13 @@ package blackjack;
 public class Card {
 
     public static enum Suit {
-        DIAMONDS, HEARTS, CLUBS, SPADES;
+        diamonds, hearts, club, spades;
     }
 
     public static enum Rank {
         TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7),
-        EIGHT(8), NINE(9), TEN(10), JACK(10), QUEEN(10), KING(10),
-        ACE(11);
+        EIGHT(8), NINE(9), TEN(10), J(10), Q(10), K(10),
+        A(11);
 
         private final int value;
 
