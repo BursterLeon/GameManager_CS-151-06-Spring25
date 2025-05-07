@@ -38,6 +38,7 @@ public class UserAccount {
         this.getUsersFromFile();
     }
 
+    //those methods are only considered for testing
     //returns True if the user with a specific username (Key) exists in the HashMap
     public boolean userExists(String username) {
         return userMap.containsKey(username);
@@ -47,6 +48,34 @@ public class UserAccount {
         if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
              userMap.put(username, new User(username, Utility.hashingPassword(password)));}
     }
+    //ONLY FOR TESTING
+    public User getUser(String username) {
+        return userMap.get(username);
+    }
+    //ONLY FOR TESTING
+     public Boolean testLoginValidation (String username, String password) {
+        if (!this.userMap.containsKey(username)) {
+            return false;
+        }
+        else {
+            //returns the user that is saved in the HashMap with the given username and assigns it to user
+            User user = this.userMap.get(username);
+            if (!user.getPassword().equals(Utility.hashingPassword(password))) {
+                return false;
+            }
+            else {
+                if (user.getPassword().equals(Utility.hashingPassword(password))) {
+                    this.setCurrentLoggedInUser(user);
+                    setCurrentLoggedInUserHighScore(user.getHighScore());
+                    loggedIn = true;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 
     public void newUser (String username, String password) {
         if (!userMap.containsKey(username) && !Utility.isNullOrWhiteSpace(username) && !Utility.isNullOrWhiteSpace(password)) {
