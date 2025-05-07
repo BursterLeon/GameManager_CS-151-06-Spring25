@@ -18,6 +18,15 @@ public class WindowManager {
             gameManagerWindow.getStage().show();
         }
     }
+    public static void openWindowHBox(hasHBox gameManagerWindow,String title) {
+        if (gameManagerWindow != null && !Utility.isNullOrWhiteSpace(title) && gameManagerWindow instanceof GameManagerWindow) {
+            gameManagerWindow.getStage().setTitle(title);
+
+            Scene scene = new Scene(gameManagerWindow.getHBox(), 500, 500);
+            gameManagerWindow.getStage().setScene(scene);
+            gameManagerWindow.getStage().show();
+        }
+    }
     public static void closeWindow(GameManagerWindow gameManagerWindow) {
         if (gameManagerWindow != null) {
             gameManagerWindow.getStage().close();
