@@ -45,6 +45,11 @@ public class SnakeGameFX extends Application {
     private int userHighscore;
     private int highScore = 0;
 
+    //ONLY FOR TESTING
+    public int getUserHighscore() {
+        return userHighscore;
+    }
+
     // Game loop
     private int speed = INITIAL_SPEED;
     private Timeline timeline;
