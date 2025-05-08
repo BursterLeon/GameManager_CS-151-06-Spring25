@@ -49,6 +49,7 @@ public class BlackjackMain {
 
     // All players will play their hand once it's their turn
     public void playTurn() {
+
         switch(currentTurn) {
             case HUMAN:
                 player.playTurn(deck);

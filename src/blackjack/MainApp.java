@@ -4,21 +4,23 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 public class MainApp extends Application {
 
-    private BlackjackMain game;  // Instance of Blackjack game logic
-    private HBox playerHandBox;  // Box to display player's cards
+    private BlackjackMain game;
+    private HBox playerHandBox;
     private HBox dealerHandBox;  // Box to display dealer's cards
     private Button hitButton;  // Hit button for player's turn
     private Button standButton;  // Stand button for player's turn
     private Button startButton;  // Start button to begin the game
     private Label gameStatusLabel;  // Display the status of the game
-    private VBox root;  // The root layout containing all UI elements
+    private VBox root;  //
 
     @Override
     public void start(Stage primaryStage) {
@@ -26,33 +28,34 @@ public class MainApp extends Application {
         game = new BlackjackMain();
         gameStatusLabel = new Label("Welcome to Blackjack! Press 'Start' to begin.");
 
-        // Create HBoxes to display cards
+
+        // Create HBoxes
         playerHandBox = new HBox(10);  // For player's cards
         dealerHandBox = new HBox(10);  // For dealer's cards
 
-        // Create the buttons for player actions
+        // Create the buttons
         hitButton = new Button("Hit");
         standButton = new Button("Stand");
         startButton = new Button("Start Game");
 
-        // Initially, disable the Hit and Stand buttons
+       // enabke
         hitButton.setDisable(true);
         standButton.setDisable(true);
 
-        // Set up action for 'Start Game' button
+
         startButton.setOnAction(event -> startGame());
 
-        // Set up action for 'Hit' button
+        // Set up hir
         hitButton.setOnAction(event -> hit());
 
-        // Set up action for 'Stand' button
+        //n
         standButton.setOnAction(event -> stand());
 
-        // Create a layout (VBox)
+
         root = new VBox(20);
         root.getChildren().addAll(startButton, gameStatusLabel, playerHandBox, dealerHandBox, hitButton, standButton);
 
-        // Set the padding and spacing for the layout
+
         root.setSpacing(20);
         root.setAlignment(Pos.CENTER);
 
@@ -61,6 +64,8 @@ public class MainApp extends Application {
         primaryStage.setTitle("Blackjack Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
     }
 
     // Method to start the game
@@ -73,10 +78,10 @@ public class MainApp extends Application {
         gameStatusLabel.setText("Your turn! Press 'Hit' or 'Stand'.");
     }
 
-    // Method to handle the 'Hit' action
+    // feature hit
     private void hit() {
         game.playTurn();  // Player takes a hit
-        updateUI();  // Update the UI after the hit
+        updateUI();
 
         if (game.getPlayer().bust()) {
             gameStatusLabel.setText("You busted! Dealer wins.");
@@ -85,7 +90,7 @@ public class MainApp extends Application {
         }
     }
 
-    // Method to handle the 'Stand' action
+    // Feature stand
     private void stand() {
         game.playTurn();  // Player stands
         game.checkPlayerHand();  // Check player hand
@@ -98,25 +103,69 @@ public class MainApp extends Application {
         standButton.setDisable(true);
     }
 
-    // Method to update the UI with the current state of the game
+    //Feature Uodate UI
     private void updateUI() {
         playerHandBox.getChildren().clear();  // Clear previous hand display
         dealerHandBox.getChildren().clear();  // Clear previous hand display
-
-        // Display the player's hand
         for (Card card : game.getPlayer().getPlayerHand()) {
-            playerHandBox.getChildren().add(new Label(card.toString()));  // Player's cards
+            String imagePath = getCardImagePath(card); // Get card image to display
+            Image cardImage = new Image(imagePath);
+            playerHandBox.getChildren().add(new ImageView(cardImage));
         }
+        //int playerScoreGet = game.getPlayer().getPlayerHandTotal();
+        //playerScoreLabel.setText("Player Score: " + playerScoreLabel);
 
-        // Display the dealer's hand (dealer's cards are revealed after player's turn)
-        if (game.getDealer().getPlayerHand().size() > 1) {
-            for (Card card : game.getDealer().getPlayerHand()) {
-                dealerHandBox.getChildren().add(new Label(card.toString()));  // Dealer's cards
-            }
-        } else {
-            dealerHandBox.getChildren().add(new Label("Hidden Card"));  // Dealer's second card is hidden initially
+
+        dealerHandBox.getChildren().clear();
+        for (Card card : game.getDealer().getPlayerHand()) {
+            String imagePath = getCardImagePath(card);
+            Image cardImage = new Image(imagePath);
+            dealerHandBox.getChildren().add(new ImageView(cardImage));
         }
+        //int dealerScoreGet = game.getDealer().getPlayerHandTotal();
+        //dealerScoreLabel.setText("Dealer Score: " + dealerScoreLabel);
+        // PlayerScoreLabel.setText("Player Score: " + player.getScore());
+        //dealerScoreLabel.setText("Dealer Score: " + dealer.getScore());
+        // Display the player's hand.
+        //for (Card card : game.getPlayer().getPlayerHand()) {
+        //            playerHandBox.getChildren().add(new Label(card.toString()));  // Player's cards
+        //        }
+        //
+        //        // Display the dealer's hand (dealer's cards are revealed after player's turn)
+        //        if (game.getDealer().getPlayerHand().size() > 1) {
+        //            for (Card card : game.getDealer().getPlayerHand()) {
+        //                dealerHandBox.getChildren().add(new Label(card.toString()));  // Dealer's cards
+        //            }
+        //        } else {
+        //            dealerHandBox.getChildren().add(new Label("Hidden Card"));  // Dealer's second card is hidden initially
+        //        }
+        // **//
+
     }
+
+
+    //DIsplay image
+        //playerScoreLabel.setText("Player Score: " + player.getScore());
+        //dealerScoreLabel.setText("Dealer Score: " + dealer.getScore());
+
+
+
+
+//GET THE CARD IMAGE FROM FILE
+private String getCardImagePath(Card card) {
+    String fileName = card.toString()+".png";// Call it cause structure the resoure filw name base on Sui + rank to make it match and call
+    return "resource/" + fileName;  }
+
+    // End game
+    private void endGame() {
+        hitButton.setDisable(true);
+        standButton.setDisable(true);
+    }
+
+
+
+
+
 
 
     // Getter for the VBox layout (required for Scene setup)

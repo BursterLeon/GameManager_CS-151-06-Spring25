@@ -23,6 +23,9 @@ public class Human extends Player {
     }
 
     public void playTurn(Deck deck) {
+        Card drawnCard = deck.hit();
+        addCard(drawnCard);
+        System.out.println("Player hits and draws " + drawnCard);
 
     }
 }

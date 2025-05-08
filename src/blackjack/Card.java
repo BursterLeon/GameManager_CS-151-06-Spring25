@@ -3,7 +3,7 @@ package blackjack;
 public class Card {
 
     public static enum Suit {
-        diamonds, HEARTS, CLUBS, SPADES;
+        diamonds, hearts, clubs, spades;
     }
 
     public static enum Rank {
@@ -39,6 +39,6 @@ public class Card {
     }
 
     public String toString() {
-        return rank + " of " + suit;
+        return suit + "_" + rank.getValue();
     }
 }
