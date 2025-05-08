@@ -25,6 +25,7 @@ public class Main extends Application {
         //making sure that all the information is saved to user_accounts.txt
         primaryStage.setOnCloseRequest(event -> {
             userAccount.writeToFile();
+            userAccount.writeToHighScoreFile();
             Platform.exit();
         });
 

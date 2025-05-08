@@ -8,7 +8,7 @@ public class User {
     public User(String name, String password) {
         this.name = name;
         this.password = password;
-        this.highScore = 0;
+        this.highScore = 1000;
     }
     public User(String name, String password, int highScore) {
         this.name = name;

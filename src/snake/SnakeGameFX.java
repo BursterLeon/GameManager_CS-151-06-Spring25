@@ -38,12 +38,12 @@ public class SnakeGameFX extends Application {
     private Direction nextDirection;
     private boolean gameOver = false;
     private boolean paused = false;
-    private int score = 0;
+    private int score = 1000;
 
     // User score tracking
     private UserAccount userAccount;
     private int userHighscore;
-    private int highScore = 0;
+    private int highScore;
 
     //ONLY FOR TESTING
     public int getUserHighscore() {
@@ -94,6 +94,7 @@ public class SnakeGameFX extends Application {
                             userAccount.changeUserHighScore(highScore);
                         }
                         userAccount.writeToFile();
+                        userAccount.writeToHighScoreFile();
                         stage.close();
                     }
                 }
@@ -132,6 +133,7 @@ public class SnakeGameFX extends Application {
                 userAccount.changeUserHighScore(highScore);
             }
             userAccount.writeToFile();
+            userAccount.writeToHighScoreFile();
             stage.close();
         });
     }
@@ -143,7 +145,7 @@ public class SnakeGameFX extends Application {
         snake.add(new Point(COLS / 2, ROWS / 2)); // Start in center
         direction = Direction.values()[random.nextInt(4)];
         nextDirection = direction;
-        score = 0;
+        score = 1000;
         speed = INITIAL_SPEED;
         gameOver = false;
         paused = false;
@@ -179,7 +181,7 @@ public class SnakeGameFX extends Application {
         // Eating food
         if (newPoint.equals(food)) {
             snake.addFirst(newPoint);
-            score++;
+            score=score+100;
             speed = Math.max(50, speed - SPEED_INCREMENT); // Increase speed
             timeline.setRate(INITIAL_SPEED / (double) speed);
             placeFood();
