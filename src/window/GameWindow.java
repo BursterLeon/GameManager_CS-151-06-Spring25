@@ -1,6 +1,7 @@
 package window;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -17,10 +18,12 @@ import java.util.Map;
 public class GameWindow extends GameManagerWindow implements hasHBox{
     private HBox hBox;
     private VBox highscoreBox;
+    private VBox toolbar;
 
     private Button snakeButton;
     private Button blackJackButton;
     private Button logOutButton;
+    private Button mainMenuButton;
 
     private Button futureGameButton1;
     private Button futureGameButton2;
@@ -30,8 +33,18 @@ public class GameWindow extends GameManagerWindow implements hasHBox{
     public GameWindow(UserAccount userAccount) {
         super(userAccount);
 
-        hBox = new HBox(100);
+        hBox = new HBox(30);
         highscoreBox = new VBox(20);
+        toolbar = new VBox(20);
+        //FORMATTING
+        highscoreBox.setPadding(new Insets(20));
+        highscoreBox.setAlignment(Pos.TOP_CENTER);
+        highscoreBox.setSpacing(10);
+        toolbar.setPadding(new Insets(20));
+        toolbar.setAlignment(Pos.TOP_CENTER);
+        toolbar.setSpacing(10);
+
+
 
         scoreLabel = new Label("Top High Score:");
         highscoreBox.getChildren().add(scoreLabel);
@@ -53,6 +66,11 @@ public class GameWindow extends GameManagerWindow implements hasHBox{
         logOutButton = new Button("Log Out");
         logOutButton.setOnAction(e -> {
             super.getUserAccount().resetLoggedIn();
+            WindowManager.closeWindow(this);
+        });
+
+        mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setOnAction(e -> {
             WindowManager.closeWindow(this);
         });
 
@@ -80,8 +98,12 @@ public class GameWindow extends GameManagerWindow implements hasHBox{
         for (Node node : highscoreBox.getChildren()) {
             VBox.setMargin(node, new Insets(5));
         }
+        toolbar.getChildren().addAll(mainMenuButton);
+        for (Node node : toolbar.getChildren()) {
+            VBox.setMargin(node, new Insets(5));
+        }
 
-        hBox.getChildren().addAll(super.getVBox(),highscoreBox);
+        hBox.getChildren().addAll(super.getVBox(),highscoreBox,toolbar);
     }
     public HBox getHBox() {
         return hBox;
