@@ -47,7 +47,7 @@ public class StartScreen {
             nameField.clear();
             passwordField.clear();
             if (userAccount.getLoggedIn())
-                WindowManager.openWindow(new GameWindow(userAccount),"GameWindow");
+                WindowManager.openWindowHBox(new GameWindow(userAccount),"GameWindow");
         });
 
         //CREATE ACCOUNT
@@ -68,6 +68,7 @@ public class StartScreen {
             @Override
             public void handle(ActionEvent event) {
                 userAccount.writeToFile();
+                userAccount.writeToHighScoreFile();
                 Platform.exit();
             }
         });
