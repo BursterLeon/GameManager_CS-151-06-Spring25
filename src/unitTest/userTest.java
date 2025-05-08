@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import user.UserAccount;
 import snake.*;
 
-import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertTrue;
 
 class userTest {
     private UserAccount userAccount;
