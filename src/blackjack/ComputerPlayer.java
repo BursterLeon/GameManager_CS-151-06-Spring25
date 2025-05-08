@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ComputerPlayer extends Player {
-    private Random random = new Random();
+    private static final Random random = new Random();
 
     public ComputerPlayer(List<Card> playerHand) {
         super(playerHand);
@@ -14,7 +14,7 @@ public class ComputerPlayer extends Player {
     public void playTurn1(Deck deck) {
         while(getPlayerHandTotal() < 16) {
             Card drawnCard = deck.hit();
-            getPlayerHand().add(drawnCard);
+            addCard(drawnCard);
             System.out.println("Computer Player 1 hits and draws " + drawnCard);
         }
 
@@ -26,6 +26,10 @@ public class ComputerPlayer extends Player {
         int total = this.getPlayerHandTotal();
 
         while(true) {
+
+            // Recalculates total after each hit
+            total = this.getPlayerHandTotal();
+
             // Computer player stands if hand total is 20 or blackjack
             if (total > 19) {
                 System.out.println("Computer Player 2 stands at " + total);
@@ -39,7 +43,7 @@ public class ComputerPlayer extends Player {
                     break;
                 } else {
                     Card drawnCard = deck.hit();
-                    getPlayerHand().add(drawnCard);
+                    addCard(drawnCard);
                     System.out.println("Computer Player 2 hits and draws " + drawnCard);
                 }
             }
@@ -47,12 +51,16 @@ public class ComputerPlayer extends Player {
             // Computer player will hit if hand total is 14 or lower
             else if (total <= 14) {
                 Card drawnCard = deck.hit();
-                getPlayerHand().add(drawnCard);
+                addCard(drawnCard);
                 System.out.println("Computer Player 2 hits and draws " + drawnCard);
             } else {
                 System.out.println("Computer Player 2 stands at " + total);
                 break;
             }
         }
+    }
+
+    public String toString() {
+        return "Computer Player";
     }
 }

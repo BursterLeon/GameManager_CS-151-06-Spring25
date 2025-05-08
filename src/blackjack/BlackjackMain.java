@@ -1,100 +1,46 @@
 package blackjack;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.List;
+
 public class BlackjackMain {
 
-    private Deck deck;
-    private Human player;
-    private Dealer dealer;
-    private ComputerPlayer computerPlayer1;
-    private ComputerPlayer computerPlayer2;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-    private Turn currentTurn;
+        System.out.println("Welcome to Blackjack!");
 
-    public enum Turn {
-        HUMAN, BOT1, BOT2, DEALER;
-    }
+        List<Card> playerHand = new ArrayList<Card>();
+        List<Card> dealerHand = new ArrayList<Card>();
+        List<Card> bot1Hand = new ArrayList<Card>();
+        List<Card> bot2Hand = new ArrayList<Card>();
+        // Create players
+        Deck deck = new Deck();
+        Human player = new Human(1000, playerHand, 0); // Start with 1000 currency
+        Dealer dealer = new Dealer(dealerHand, deck);
+        ComputerPlayer bot1 = new ComputerPlayer(bot1Hand);
+        ComputerPlayer bot2 = new ComputerPlayer(bot2Hand);
 
-    public void placeBet() {
+        // Create and configure game
+        BlackjackGame game = new BlackjackGame();
+        game.setDeck(deck);
+        game.setPlayer(player);
+        game.setDealer(dealer);
+        game.setComputerPlayer1(bot1);
+        game.setComputerPlayer2(bot2);
 
-    }
+        // Start the game
+        game.startGame();
 
-    // All players will play their hand once it's their turn
-    public void playTurn() {
-        switch(currentTurn) {
-            case HUMAN:
-                player.playTurn(deck);
-                break;
-            case BOT1:
-                computerPlayer1.playTurn1(deck);
-                break;
-            case BOT2:
-                computerPlayer2.playTurn2(deck);
-                break;
-            case DEALER:
-                dealer.playTurn(deck);
-                break;
+        scanner.close();
         }
     }
 
-    // Turns rotate starting from Human to Dealer and then goes back to Human for the next round
-    public void switchTurn() {
-        switch(currentTurn) {
-            case HUMAN:
-                currentTurn = Turn.BOT1;
-                break;
-            case BOT1:
-                currentTurn = Turn.BOT2;
-                break;
-            case BOT2:
-                currentTurn = Turn.DEALER;
-                break;
-            case DEALER:
-                currentTurn = Turn.HUMAN;
-                break;
-        }
-    }
-
-    public void checkPlayerHand() {
-        int total = player.getPlayerHandTotal();
-
-
-        if(player.getPlayerHandTotal() == 21) {
-            System.out.println("Blackjack! You win!");
-        } else if(player.bust()) {
-            System.out.println("You busted with " + player.getPlayerHandTotal());
-            System.out.println("You lose!");
-        } else if(dealer.bust()) {
-            System.out.println("Dealer busts with " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() == dealer.getPlayerHandTotal()) {
-            System.out.println("Push! It's a draw!");
-        } else if(player.getPlayerHandTotal() > dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() < dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You lose!");
-        }
-    }
-
-    public void checkDealerHand() {
-        if(dealer.bust()) {
-            System.out.println("Dealer busted with " + dealer.getPlayerHandTotal());
-        }
-    }
-
-    public void checkComputerHand() {
-
-    }
-
-
-    public void startGame() {}
-    public void saveGame() {}
-    public void exitGame() {}
-    public void loadGame(String saveStateString) {}
+//    public void saveGame() {}
+//    public void exitGame() {}
+//    public void loadGame(String saveStateString) {}
+//
 
 
 
-}

@@ -17,19 +17,23 @@ public class Deck {
         return deck;
     }
 
+    // Shuffles deck
     public void shuffle() {
         Collections.shuffle(this.deck);
     }
 
+    // Resets deck after each round
     public void reset() {
         this.deck.clear();
         this.createDeck();
     }
 
+    // Card on top of the deck gets removed whenever hit method is called
     public Card hit() {
         return deck.remove(0);
     }
 
+    // Assigning every card a rank and suit
     private void createDeck() {
         for(Suit suit : Suit.values()) {
             for(Rank rank : Rank.values()) {
