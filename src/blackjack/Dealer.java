@@ -29,7 +29,7 @@ public class Dealer extends Player {
 
         for(Card card : getPlayerHand()) {
             sum += card.getRank().getValue();
-            if(card.getRank() == Rank.ACE) {
+            if(card.getRank() == Rank.A) {
                 hasAce = true;
             }
         }
