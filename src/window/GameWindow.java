@@ -46,6 +46,9 @@ public class GameWindow extends GameManagerWindow implements hasHBox{
         });
 
         blackJackButton = new Button("Black Jack");
+        blackJackButton.setOnAction(e -> {
+            new blackjack.MainApp().start(new Stage());
+        });
 
         logOutButton = new Button("Log Out");
         logOutButton.setOnAction(e -> {
