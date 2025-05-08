@@ -10,8 +10,9 @@ public class Dealer extends Player {
     }
 
     public void playTurn(Deck deck) {
-
-        while(this.getPlayerHandTotal() < 17 || isSoft17()) {
+        // Make sure if is under 15 it can keep hit
+        System.out.println("Dealer starts with total: " + getPlayerHandTotal() + ", hand: " + getPlayerHand());
+        while(this.getPlayerHandTotal() < 15 || isSoft17()) {
             Card drawnCard = deck.hit();
             this.getPlayerHand().add(drawnCard);
             System.out.println("Dealer hits and draws " + drawnCard);
@@ -39,6 +40,15 @@ public class Dealer extends Player {
             return false;
         }
 
+    }
+    public boolean shouldHit() {
+        return this.getPlayerHandTotal() < 15;
+    }
+
+    public void hit(Deck deck) {
+        Card drawnCard = deck.hit();
+        this.getPlayerHand().add(drawnCard);
+        System.out.println("Dealer hits " + drawnCard + ", total: " + getPlayerHandTotal());
     }
 
 }

@@ -21,12 +21,14 @@ public class MainApp extends Application {
     private Button startButton;  // Start button to begin the game
     private Label gameStatusLabel;  // Display the status of the game
     private VBox root;  //
-
+    private Label playerScoreLabel;
     @Override
     public void start(Stage primaryStage) {
         // Initialize the Blackjack game
         game = new BlackjackMain();
         gameStatusLabel = new Label("Welcome to Blackjack! Press 'Start' to begin.");
+
+        playerScoreLabel = new Label("Player Score: 0");
 
 
         // Create HBoxes
@@ -53,7 +55,7 @@ public class MainApp extends Application {
 
 
         root = new VBox(20);
-        root.getChildren().addAll(startButton, gameStatusLabel, playerHandBox, dealerHandBox, hitButton, standButton);
+        root.getChildren().addAll(startButton, gameStatusLabel, playerHandBox, dealerHandBox, hitButton, standButton,playerScoreLabel);
 
 
         root.setSpacing(20);
@@ -80,6 +82,8 @@ public class MainApp extends Application {
 
     // feature hit
     private void hit() {
+        //game.switchTurn();
+
         game.playTurn();  // Player takes a hit
         updateUI();
 
@@ -92,13 +96,22 @@ public class MainApp extends Application {
 
     // Feature stand
     private void stand() {
-        game.playTurn();  // Player stands
-        game.checkPlayerHand();  // Check player hand
+       // game.switchTurn() ; // this move to BOT1
+         // Player stands
+        game.checkPlayerHand();// Check player hand
         updateUI();  // Update the UI with final hands
 
-        if (!game.getPlayer().bust()) {
-            game.checkDealerHand();  // Check dealer hand after player stands
-        }
+        String result;
+        result= game.checkPlayerHand();;
+
+       // while(result.equals("hit")) {
+         //   game.playTurn();  // Calls Dealer.playTurn, hitting if total < 15
+           // updateUI();
+            //result= game.checkPlayerHand();
+
+        //}
+        gameStatusLabel.setText(result);
+
         hitButton.setDisable(true);  // Disable buttons after stand
         standButton.setDisable(true);
     }
@@ -112,6 +125,7 @@ public class MainApp extends Application {
             Image cardImage = new Image(imagePath);
             playerHandBox.getChildren().add(new ImageView(cardImage));
         }
+        playerScoreLabel.setText("Player Score: " + game.getPlayer().getPlayerHandTotal());
         //int playerScoreGet = game.getPlayer().getPlayerHandTotal();
         //playerScoreLabel.setText("Player Score: " + playerScoreLabel);
 

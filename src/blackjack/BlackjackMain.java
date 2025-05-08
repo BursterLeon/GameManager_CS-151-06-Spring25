@@ -23,8 +23,9 @@ public class BlackjackMain {
     private Dealer dealer;
     private ComputerPlayer computerPlayer1;
     private ComputerPlayer computerPlayer2;
-
     private Turn currentTurn;
+
+
 
     public enum Turn {
         HUMAN, BOT1, BOT2, DEALER;
@@ -83,29 +84,31 @@ public class BlackjackMain {
                 break;
         }
     }
+    public Turn getCurrentTurn() {
+        return currentTurn;
+    }
 
-    public void checkPlayerHand() {
-        int total = player.getPlayerHandTotal();
+    
 
+    // Return result base on current score
+    public String checkPlayerHand() {
+        int playerTotal = player.getPlayerHandTotal();
+        int dealerTotal = dealer.getPlayerHandTotal();
 
-        if(player.getPlayerHandTotal() == 21) {
-            System.out.println("Blackjack! You win!");
-        } else if(player.bust()) {
-            System.out.println("You busted with " + player.getPlayerHandTotal());
-            System.out.println("You lose!");
-        } else if(dealer.bust()) {
-            System.out.println("Dealer busts with " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() == dealer.getPlayerHandTotal()) {
-            System.out.println("Push! It's a draw!");
-        } else if(player.getPlayerHandTotal() > dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() < dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You lose!");
+        if (playerTotal == 21 && player.getPlayerHand().size() == 2) {
+            return "Blackjack! You win!";
+        } else if (player.bust()) {
+            return "You busted with " + playerTotal + ". You lose!";
+        } else if (dealer.bust()) {
+            return "Dealer busts with " + dealerTotal + ". You win!";
+        } else if (playerTotal == dealerTotal) {
+            return "Push! It's a draw!";
+
+        }else if (playerTotal > dealerTotal) {
+            return "You have " + playerTotal + ", Dealer has " + dealerTotal + ". You win!";
+        }
+        else {
+            return "You have " + playerTotal + ", Dealer has " + dealerTotal + ". You lose!";
         }
     }
 
