@@ -173,7 +173,5 @@ private String getCardImagePath(Card card) {
         return root;  // Return the root VBox containing the game UI
     }
 
-    public static void main(String[] args) {
-        launch(args);  // Launch the JavaFX application
-    }
+
 }
