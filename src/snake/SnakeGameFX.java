@@ -1,9 +1,9 @@
 package snake;
 
+// Librries
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -22,6 +22,7 @@ import java.util.Random;
 
 public class SnakeGameFX extends Application {
 
+    // Constants for screen and game layout
     private static final int WIDTH = 600;
     private static final int HEIGHT = 650;
     private static final int TILE_SIZE = 20;
@@ -30,6 +31,7 @@ public class SnakeGameFX extends Application {
     private static final int INITIAL_SPEED = 150;
     private static final int SPEED_INCREMENT = 5;
 
+    // Game state variables
     private LinkedList<Point> snake = new LinkedList<>();
     private Point food;
     private Direction direction;
@@ -38,29 +40,37 @@ public class SnakeGameFX extends Application {
     private boolean paused = false;
     private int score = 0;
 
-
+    // User score tracking
     private UserAccount userAccount;
     private int userHighscore;
-
-
     private int highScore = 0;
+
+    //ONLY FOR TESTING
+    public int getUserHighscore() {
+        return userHighscore;
+    }
+
+    // Game loop
     private int speed = INITIAL_SPEED;
     private Timeline timeline;
     private Random random = new Random();
     private GraphicsContext gc;
 
-    //constructor takes the saved highscore from the currently logged-in user
+     // Constructor to accepts a user account for high score management.
     public SnakeGameFX(UserAccount userAccount) {
         this.userAccount = userAccount;
         userHighscore = userAccount.getCurrentLoggedInUserHighScore();
-        this.highScore = userAccount.getCurrentLoggedInUserHighScore();
+        this.highScore = userHighscore;
     }
 
+    // Initializes and starts the JavaFX UI
     @Override
     public void start(Stage stage) {
+        // Create canvas and graphics context
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
+        // Scene and stage setup
         Pane root = new Pane(canvas);
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -68,52 +78,55 @@ public class SnakeGameFX extends Application {
         stage.setResizable(false);
         stage.show();
 
+        // Start the game
         initializeGame();
 
+        // Key input handling
         scene.setOnKeyPressed(e -> {
+            KeyCode code = e.getCode();
+
+            // Handle input when game is over
             if (gameOver) {
-                if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) {
-                    initializeGame();
-                }
-                //ESC lets the user return to the game window
-                if(e.getCode() == KeyCode.ESCAPE) {
-                    if (highScore > userHighscore) {
-                        userAccount.changeUserHighScore(highScore);
+                switch (code) {
+                    case ENTER, SPACE -> initializeGame(); // Restart game
+                    case ESCAPE -> {
+                        if (highScore > userHighscore) {
+                            userAccount.changeUserHighScore(highScore);
+                        }
+                        userAccount.writeToFile();
+                        stage.close();
                     }
-                    userAccount.writeToFile();
-                    stage.close();
                 }
                 return;
             }
 
-            switch (e.getCode()) {
-                case UP:
+            // Handle direction input and pause toggle during gameplay
+            switch (code) {
+                case UP -> {
                     if (direction != Direction.DOWN) nextDirection = Direction.UP;
-                    break;
-                case DOWN:
+                }
+                case DOWN -> {
                     if (direction != Direction.UP) nextDirection = Direction.DOWN;
-                    break;
-                case LEFT:
+                }
+                case LEFT -> {
                     if (direction != Direction.RIGHT) nextDirection = Direction.LEFT;
-                    break;
-                case RIGHT:
+                }
+                case RIGHT -> {
                     if (direction != Direction.LEFT) nextDirection = Direction.RIGHT;
-                    break;
-                case ESCAPE:
-                    togglePause();
-                    break;
+                }
+                case ESCAPE -> togglePause(); // Pause/resume
             }
         });
 
-        // Corrected Timeline initialization
+        // Create and start game loop timeline
         timeline = new Timeline(new KeyFrame(Duration.millis(speed), e -> {
-            run();
-            draw();
+            run();   // Game logic
+            draw();  // Rendering
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        //make sure that the current MaxHighscore is saved, when the user closes the window or program
+        // Save score on window close
         stage.setOnCloseRequest(event -> {
             if (highScore > userHighscore) {
                 userAccount.changeUserHighScore(highScore);
@@ -123,9 +136,11 @@ public class SnakeGameFX extends Application {
         });
     }
 
+
+    // Initialize or restart the game state.
     private void initializeGame() {
         snake.clear();
-        snake.add(new Point(COLS / 2, ROWS / 2));
+        snake.add(new Point(COLS / 2, ROWS / 2)); // Start in center
         direction = Direction.values()[random.nextInt(4)];
         nextDirection = direction;
         score = 0;
@@ -134,9 +149,10 @@ public class SnakeGameFX extends Application {
         paused = false;
         placeFood();
 
+        // Reset timeline
         if (timeline != null) {
             timeline.stop();
-            timeline = new Timeline(new KeyFrame(Duration.millis(speed),e -> {
+            timeline = new Timeline(new KeyFrame(Duration.millis(speed), e -> {
                 run();
                 draw();
             }));
@@ -145,64 +161,76 @@ public class SnakeGameFX extends Application {
         }
     }
 
+    // Runs game logic for movement, collisions, food.
     private void run() {
         if (paused || gameOver) return;
 
         direction = nextDirection;
-
         Point head = snake.peekFirst();
         Point newPoint = head.move(direction);
 
+        // Collision with wall or self
         if (newPoint.x < 0 || newPoint.y < 0 || newPoint.x >= COLS || newPoint.y >= ROWS ||
                 snake.contains(newPoint)) {
             gameOver = true;
             return;
         }
 
+        // Eating food
         if (newPoint.equals(food)) {
             snake.addFirst(newPoint);
-            score += 1;
-            speed = Math.max(50, speed - SPEED_INCREMENT);
-            timeline.setRate(INITIAL_SPEED / (double)speed);
+            score++;
+            speed = Math.max(50, speed - SPEED_INCREMENT); // Increase speed
+            timeline.setRate(INITIAL_SPEED / (double) speed);
             placeFood();
         } else {
+            // Move forward
             snake.addFirst(newPoint);
             snake.removeLast();
         }
     }
 
+    // Draws the entire game frame: snake, food, scores, overlays.
     private void draw() {
+        // Background
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, WIDTH, HEIGHT);
 
+        // Scores
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Arial", 20));
         gc.fillText("Score: " + score, 20, 30);
         gc.fillText("High Score: " + highScore, WIDTH - 150, 30);
 
+        // Game boundary
         gc.setStroke(Color.DARKGREEN);
         gc.setLineWidth(2);
         gc.strokeRect(0, 50, WIDTH, HEIGHT - 50);
 
+        // Game over screen
         if (gameOver) {
             drawGameOver();
             return;
         }
 
+        // Pause screen
         if (paused) {
             drawPauseScreen();
             return;
         }
 
+        // Snake
         gc.setFill(Color.LIMEGREEN);
         for (Point p : snake) {
             gc.fillRect(p.x * TILE_SIZE, p.y * TILE_SIZE + 50, TILE_SIZE - 1, TILE_SIZE - 1);
         }
 
+        // Food
         gc.setFill(Color.RED);
         gc.fillOval(food.x * TILE_SIZE, food.y * TILE_SIZE + 50, TILE_SIZE, TILE_SIZE);
     }
 
+    // Draws game over overlay and final scores.
     private void drawGameOver() {
         gc.setFill(Color.rgb(0, 0, 0, 0.7));
         gc.fillRect(0, 0, WIDTH, HEIGHT);
@@ -212,7 +240,8 @@ public class SnakeGameFX extends Application {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("GAME OVER", WIDTH / 2, HEIGHT / 2 - 50);
 
-        highScore = Math.max(highScore, score);
+        highScore = Math.max(highScore, score); // Update high score
+
         gc.setFill(Color.WHITE);
         gc.setFont(new Font("Arial", 30));
         gc.fillText("Final Score: " + score, WIDTH / 2, HEIGHT / 2);
@@ -222,6 +251,7 @@ public class SnakeGameFX extends Application {
         gc.fillText("Press ENTER or SPACE to restart, ESC to exit", WIDTH / 2, HEIGHT / 2 + 100);
     }
 
+     // Draws paused game overlay.
     private void drawPauseScreen() {
         gc.setFill(Color.rgb(0, 0, 0, 0.5));
         gc.fillRect(0, 0, WIDTH, HEIGHT);
@@ -235,21 +265,25 @@ public class SnakeGameFX extends Application {
         gc.fillText("Press ESC to resume", WIDTH / 2, HEIGHT / 2 + 50);
     }
 
+    // Places food at a random location.
     private void placeFood() {
         do {
             food = new Point(random.nextInt(COLS), random.nextInt(ROWS));
         } while (snake.contains(food));
     }
 
+    // Toggles game pause state and updates rendering accordingly.
     private void togglePause() {
         paused = !paused;
         if (paused) {
             timeline.pause();
+            draw();
         } else {
             timeline.play();
         }
     }
 
+    //Direction enum for snake .
     private enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
@@ -262,6 +296,7 @@ public class SnakeGameFX extends Application {
             this.y = y;
         }
 
+        // Moves a point in a direction
         Point move(Direction dir) {
             return switch (dir) {
                 case UP -> new Point(x, y - 1);
@@ -271,13 +306,14 @@ public class SnakeGameFX extends Application {
             };
         }
 
+        // Equals override for comparison
         @Override
         public boolean equals(Object o) {
-            if (!(o instanceof Point)) return false;
-            Point other = (Point) o;
+            if (!(o instanceof Point other)) return false;
             return this.x == other.x && this.y == other.y;
         }
 
+        // Hashcode override for proper use in collections
         @Override
         public int hashCode() {
             return x * 31 + y;
