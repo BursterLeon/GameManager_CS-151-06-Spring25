@@ -38,7 +38,5 @@ public class Card {
         return rank;
     }
 
-    public String toString() {
-        return suit + "_" + rank.getValue();
-    }
-}
+
+    }}
