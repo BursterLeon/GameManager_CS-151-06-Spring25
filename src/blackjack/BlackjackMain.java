@@ -18,20 +18,38 @@ import blackjack.Dealer;
 import java.util.ArrayList;
 public class BlackjackMain {
 
+
+
+
     private Deck deck;
     private Human player;
     private Dealer dealer;
-    private ComputerPlayer computerPlayer1;
-    private ComputerPlayer computerPlayer2;
-
+    private ComputerPlayer botPlayer1;
+    private ComputerPlayer botPlayer2;
     private Turn currentTurn;
+
+
+
+
+
+
+
+
+
+
+
 
     public enum Turn {
         HUMAN, BOT1, BOT2, DEALER;
     }
-    public Human getPlayer() {
-        return player;
-    }
+
+
+
+
+
+
+
+
 
 
     //constructor
@@ -39,32 +57,48 @@ public class BlackjackMain {
         this.deck = new Deck();
         this.player = new Human(1000, 0, new ArrayList<>());
         this.dealer = new Dealer(new ArrayList<>());
-        this.computerPlayer1 = new ComputerPlayer(new ArrayList<>());
-        this.computerPlayer2 = new ComputerPlayer(new ArrayList<>());
+        this.botPlayer1 = new ComputerPlayer(new ArrayList<>());
+        this.botPlayer2= new ComputerPlayer(new ArrayList<>());
         this.currentTurn = Turn.HUMAN;
         deck.shuffle();
+        dealInitialCards();
     }
+
+
+
+
+
+
+
+
+
 
 
 
     // All players will play their hand once it's their turn
     public void playTurn() {
 
+
+
+
         switch(currentTurn) {
             case HUMAN:
                 player.playTurn(deck);
                 break;
             case BOT1:
-                computerPlayer1.playTurn1(deck);
+                botPlayer1.playTurn1(deck);
                 break;
             case BOT2:
-                computerPlayer2.playTurn2(deck);
+                botPlayer2.playTurn2(deck);
                 break;
             case DEALER:
                 dealer.playTurn(deck);
                 break;
         }
     }
+
+
+
 
     // Turns rotate starting from Human to Dealer and then goes back to Human for the next round
     public void switchTurn() {
@@ -83,31 +117,49 @@ public class BlackjackMain {
                 break;
         }
     }
+    public Turn getCurrentTurn() {
+        return currentTurn;
+    }
 
-    public void checkPlayerHand() {
-        int total = player.getPlayerHandTotal();
 
 
-        if(player.getPlayerHandTotal() == 21) {
-            System.out.println("Blackjack! You win!");
-        } else if(player.bust()) {
-            System.out.println("You busted with " + player.getPlayerHandTotal());
-            System.out.println("You lose!");
-        } else if(dealer.bust()) {
-            System.out.println("Dealer busts with " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() == dealer.getPlayerHandTotal()) {
-            System.out.println("Push! It's a draw!");
-        } else if(player.getPlayerHandTotal() > dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You win!");
-        } else if(player.getPlayerHandTotal() < dealer.getPlayerHandTotal()) {
-            System.out.println("You have " + player.getPlayerHandTotal());
-            System.out.println("Dealer has " + dealer.getPlayerHandTotal());
-            System.out.println("You lose!");
+
+
+
+
+
+
+
+    // Return result base on current score
+    public String checkPlayerHand() {
+        int playerTotal = player.getPlayerHandTotal();
+        int dealerTotal = dealer.getPlayerHandTotal();
+
+
+
+
+        if (playerTotal == 21 && player.getPlayerHand().size() == 2) {
+            return "Blackjack! You win!";
+        } else if (player.bust()) {
+            return "You busted with " + playerTotal + ". You lose!";
+        } else if (dealer.bust()) {
+            return "Dealer busts with " + dealerTotal + ". You win!";
+        } else if (playerTotal == dealerTotal) {
+            return "Push! It's a draw!";
+
+
+
+
+        }else if (playerTotal > dealerTotal) {
+            return "You have " + playerTotal + ", Dealer has " + dealerTotal + ". You win!";
+        }
+        else {
+            return "You have " + playerTotal + ", Dealer has " + dealerTotal + ". You lose!";
         }
     }
+
+
+
 
     public void checkDealerHand() {
         if(dealer.bust()) {
@@ -115,36 +167,68 @@ public class BlackjackMain {
         }
     }
 
+
+
+
     public void checkComputerHand() {
         deck.shuffle();
         player = new Human(1000, 0, new ArrayList<>());
         dealer = new Dealer(new ArrayList<>());
-        computerPlayer1 = new ComputerPlayer(new ArrayList<>());
-        computerPlayer2 = new ComputerPlayer(new ArrayList<>());
+        botPlayer1 = new ComputerPlayer(new ArrayList<>());
+        botPlayer2 = new ComputerPlayer(new ArrayList<>());
         dealInitialCards();
     }
+
+
+
 
     // Give 2 card for the player
     public void dealInitialCards() {
         for (int i = 0; i < 2; i++) {
             player.addCard(deck.hit()); // Loop 2 time to give 2 card for each plater
             dealer.addCard(deck.hit());
-            computerPlayer1.addCard(deck.hit());
-            computerPlayer2.addCard(deck.hit());
+            botPlayer1.addCard(deck.hit());
+            botPlayer2.addCard(deck.hit());
         }
     }
     public void startGame() {
-        deck.shuffle(); // Stary by suffer
-        player = new Human(1000, 0, new ArrayList<>());
-        dealer = new Dealer(new ArrayList<>());
-        computerPlayer1 = new ComputerPlayer(new ArrayList<>());
-        computerPlayer2 = new ComputerPlayer(new ArrayList<>());
-        dealInitialCards();
+        resetGame();
+
+
+
 
     }
     public Dealer getDealer() {
-        return this.dealer;  // Return the dealer object
+        return dealer;  // Return the dealer object
     }
+    public Human getPlayer() {
+        return player;
+    }
+
+
+    // thiss reset all state player,
+    public void resetGame() {
+        this.deck = new Deck();
+        this.player = new Human(1000, 0, new ArrayList<>());
+        this.dealer = new Dealer(new ArrayList<>());
+        this.botPlayer1 = new ComputerPlayer(new ArrayList<>()); // Create a new arrrat list
+        this.botPlayer2 = new ComputerPlayer(new ArrayList<>());
+        this.currentTurn = Turn.HUMAN;
+        deck.shuffle();// Shuffle again to make new game
+        dealInitialCards();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -153,9 +237,25 @@ public class BlackjackMain {
 
     //========== get the image inssde the ressource and display out===========================//
 
+
+
+
+    public ComputerPlayer getBotPlayer1() {
+        return botPlayer1;
+    }
+    public ComputerPlayer getBotPlayer2() {
+        return botPlayer2;
+    }
     public void saveGame() {}
     public void exitGame() {}
     public void loadGame(String saveStateString) {}
+
+
+
+
+
+
+
 
 
 
