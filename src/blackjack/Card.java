@@ -8,8 +8,8 @@ public class Card {
 
     public static enum Rank {
         TWO(2), THREE(3), FOUR(4), FIVE(5), SIX(6), SEVEN(7),
-        EIGHT(8), NINE(9), TEN(10), JACK(10), QUEEN(10), KING(10),
-        ACE(11);
+        EIGHT(8), NINE(9), TEN(10), J(10), Q(10), K(10),
+        A(11);
         private final int value;
 
         Rank(int value) {
@@ -39,6 +39,18 @@ public class Card {
     }
 
     public String toString() {
-        return suit + "_" + rank.getValue();
+        if (rank.name().equals("J")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("Q")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("K")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("A")) {
+            return suit + "_" + rank.name();
+        } else {
+            return suit + "_" + rank.getValue();
+        }
+
     }
 }
+
