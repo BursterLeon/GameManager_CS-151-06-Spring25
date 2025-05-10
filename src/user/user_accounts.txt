@@ -1,6 +1,0 @@
-hello4,IDMMN6
-hello5,IDMMN5
-hello2,IDMMN4
-hello,IDMMN
-hello3,IDMMN3
-hello6,IDMMN8
