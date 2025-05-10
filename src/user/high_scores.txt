@@ -1,6 +1,6 @@
 hello4,1000
 hello5,1000
-hello2,1000
-hello,1300
+hello2,1500
+hello,1400
 hello3,1000
 hello6,1200
