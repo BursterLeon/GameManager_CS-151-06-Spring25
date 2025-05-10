@@ -27,6 +27,10 @@ public class Deck {
     }
 
     public Card hit() {
+
+        if (deck.isEmpty()) {
+            throw new IllegalStateException("Deck is empty");
+        }
         return deck.remove(0);
     }
 

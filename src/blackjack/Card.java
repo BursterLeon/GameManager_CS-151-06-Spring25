@@ -39,8 +39,18 @@ public class Card {
     }
 
     public String toString() {
+        if (rank.name().equals("J")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("Q")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("K")) {
+            return suit + "_" + rank.name();
+        } else if (rank.name().equals("A")) {
+            return suit + "_" + rank.name();
+        } else {
+            return suit + "_" + rank.getValue();
+        }
 
-        return suit + "_" + rank.getValue();
     }
 }
 
