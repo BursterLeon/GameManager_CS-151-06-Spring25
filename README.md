@@ -12,19 +12,19 @@ Key Components:
 
 https://openjfx.io/openjfx-docs/#introduction
 
-# 1. Create a JavaFX project: 
+### 1. Create a JavaFX project: 
 Download the appropriate JavaFX SDK for your operating system and unzip it to a desired location, for instance /Users/your-user/Downloads/javafx-sdk-24
 
-# 2. 
+### 2. 
 Open the repository in an IDE of your choice
 
-# 3. Set JDK 24: 
+### 3. Set JDK 24: 
 Go to File -> Project Structure -> Project, and set the project SDK to 24. You can also set the language level to 11 or greater.
 
-# 4. Create a library: 
+### 4. Create a library: 
 Go to File -> Project Structure -> Libraries and add the JavaFX 24 SDK as a library to the project. Point to the lib folder of the JavaFX SDK.
 
-# 5. Add VM options: 
+### 5. Add VM options: 
 click on Run -> Edit Configurations... and add these VM options: 
 Mac/Linux:
 —module-path /path/to/javafx-sdk-24.0.1/lib --add-modules javafx.controls,javafx.fxml
