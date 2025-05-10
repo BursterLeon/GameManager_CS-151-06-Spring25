@@ -1,10 +1,11 @@
 package blackjack;
 
+
+import blackjack.BlackjackMain.Turn;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,114 +14,263 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 public class MainApp extends Application {
 
-    private BlackjackMain game;
-    private HBox playerHandBox;
-    private HBox dealerHandBox;  // Box to display dealer's cards
-    private Button hitButton;  // Hit button for player's turn
-    private Button standButton;  // Stand button for player's turn
-    private Button startButton;  // Start button to begin the game
-    private Label gameStatusLabel;  // Display the status of the game
-    private VBox root;  //
 
+
+
+    private BlackjackMain game;
+
+
+    private HBox playerHand;
+    private HBox dealerHand;  // box to display dealer's cards
+    private Button hitButton;  // hit button for player's turn
+    private Button standButton;  // stand button for player's turn
+    private Button startButton;  // start button to begin the game
+    private Label gameStatusLabel;  // display the status of the game
+    private VBox root;  //
+    private HBox botHand1;
+    private HBox botHand2; // Display the second hand
+    private Label playerScoreLabel;
     @Override
     public void start(Stage primaryStage) {
         // Initialize the Blackjack game
         game = new BlackjackMain();
         gameStatusLabel = new Label("Welcome to Blackjack! Press 'Start' to begin.");
+        playerScoreLabel = new Label("Player Score: 0");
 
 
-        // Create HBoxes
-        playerHandBox = new HBox(10);  // For player's cards
-        dealerHandBox = new HBox(10);  // For dealer's cards
+
+
+
+
+
+
+
+
+        // create HBoxes
+
+
+        playerHand = new HBox(5);
+        botHand1 =new HBox(5);
+        botHand2 =new HBox(5);
+        dealerHand = new HBox(5);
+
+
+        Label playerLabel = new Label("Player Hand");
+        Label botHand1Label = new Label("Bot 1 Hand");
+        Label botHand2Label = new Label("Bot 2 Hand");
+        Label dealerLabel = new Label("Dealer Hand");
+
 
         // Create the buttons
         hitButton = new Button("Hit");
         standButton = new Button("Stand");
         startButton = new Button("Start Game");
 
-       // enabke
+
+
+
+        // enabke
         hitButton.setDisable(true);
         standButton.setDisable(true);
 
 
+
+
+
+
+
+
         startButton.setOnAction(event -> startGame());
+
+
+
 
         // Set up hir
         hitButton.setOnAction(event -> hit());
 
-        //n
+
+
+
+        //Setup Star start action
         standButton.setOnAction(event -> stand());
 
 
-        root = new VBox(20);
-        root.getChildren().addAll(startButton, gameStatusLabel, playerHandBox, dealerHandBox, hitButton, standButton);
 
 
-        root.setSpacing(20);
+
+
+// Root layout
+        root = new VBox(10);
+
+
+        root.getChildren().addAll(
+                startButton,
+                gameStatusLabel,
+                playerLabel, playerHand,
+                botHand1Label,botHand1,
+                botHand2Label,botHand2,
+                dealerLabel, dealerHand,
+                hitButton, standButton,
+                playerScoreLabel
+        );
+
+
+        root.setSpacing(10);
         root.setAlignment(Pos.CENTER);
 
-        // Scene setup
-        Scene scene = new Scene(root, 400, 300);  // Set scene size
+
+
+
+        //Out side setuo
+        Scene scene = new Scene(root, 800, 600);  // Increse scen size to 4 hand in to display in 1 screen
         primaryStage.setTitle("Blackjack Game");
         primaryStage.setScene(scene);
         primaryStage.show();
 
 
+
+
+
+
+
+
     }
+
+
+
 
     // Method to start the game
     private void startGame() {
-        game.startGame();  // Initialize game
-        updateUI();  // Update the UI with initial hand displays
+        game.resetGame();  // Initialize game
+        // Update the UI with initial hand displays
+
+
+
 
         hitButton.setDisable(false);  // Enable buttons after game start
         standButton.setDisable(false);
         gameStatusLabel.setText("Your turn! Press 'Hit' or 'Stand'.");
+        playerScoreLabel.setText("Player Score: 0");
+
+
+        // Clear the hand display so when let say . press again it will restart
+        playerHand.getChildren().clear();
+        botHand1.getChildren().clear();
+        botHand2.getChildren().clear();
+        dealerHand.getChildren().clear();
+
+
+        updateUI(); // update initial
     }
+
+
+
 
     // feature hit
     private void hit() {
+        //game.switchTurn();
+
+
+
+
         game.playTurn();  // Player takes a hit
         updateUI();
 
+
+// Make after it bust get all player hit
         if (game.getPlayer().bust()) {
             gameStatusLabel.setText("You busted! Dealer wins.");
-            hitButton.setDisable(true);
-            standButton.setDisable(true);
+            endGame();
         }
     }
+
+
+
 
     // Feature stand
     private void stand() {
-        game.playTurn();  // Player stands
-        game.checkPlayerHand();  // Check player hand
         updateUI();  // Update the UI with final hands
+        gameStatusLabel.setText("Player Stand, Bot 1 turn");
 
-        if (!game.getPlayer().bust()) {
-            game.checkDealerHand();  // Check dealer hand after player stands
+
+        game.switchTurn(); // Go to bot1
+        game.playTurn();
+        updateUI();
+        gameStatusLabel.setText("Bot 1 done. bot2 turn");
+        game.switchTurn(); // Go to bot2
+        game.playTurn();
+        updateUI();
+        gameStatusLabel.setText("Bot 2 done. Dealer turn");
+
+
+        game.switchTurn(); // Go to Dealer
+        // Now dealer logic when dealer lesss then 15 it a logic to let them hit
+        while (game.getDealer().getPlayerHandTotal() < 15)  {
+            game.playTurn();  // Dealer hits if total < 15
+            updateUI();
+            gameStatusLabel.setText("Dealer hits. Dealer's total: " + game.getDealer().getPlayerHandTotal());
         }
-        hitButton.setDisable(true);  // Disable buttons after stand
-        standButton.setDisable(true);
+        gameStatusLabel.setText("Dealer stands. Checking results...");
+        updateUI();
+        String result = game.checkPlayerHand();
+        gameStatusLabel.setText(result);
+        endGame();
+
+
     }
+
+
+
 
     //Feature Uodate UI
     private void updateUI() {
-        playerHandBox.getChildren().clear();  // Clear previous hand display
-        dealerHandBox.getChildren().clear();  // Clear previous hand display
+        playerHand.getChildren().clear();  // Clear prevous
+        botHand1.getChildren().clear();
+        botHand2.getChildren().clear();
+        dealerHand.getChildren().clear();
+
+
+        // It will update the UI card base on what the logic and plater pakying of each hand
         for (Card card : game.getPlayer().getPlayerHand()) {
-            String imagePath = getCardImagePath(card); // Get card image to display
-            Image cardImage = new Image(imagePath);
-            playerHandBox.getChildren().add(new ImageView(cardImage));
+            String imagePath = getCardImagePath(card);
+            Image cardImage = new Image(imagePath); // Select in the file of the image
+            ImageView cardView = new ImageView(cardImage);// Now view it
+            cardView.setFitWidth(100); //Resize the cars becasur file of the image was too large
+            cardView.setFitHeight(150);
+            cardView.setPreserveRatio(true);
+            playerHand.getChildren().add(cardView);
         }
-        //int playerScoreGet = game.getPlayer().getPlayerHandTotal();
-        //playerScoreLabel.setText("Player Score: " + playerScoreLabel);
+        playerScoreLabel.setText("Player Score: " + game.getPlayer().getPlayerHandTotal());
 
 
-        dealerHandBox.getChildren().clear();
+        for (Card card : game.getBotPlayer1().getPlayerHand()) {
+            String imagePath = getCardImagePath(card);
+            Image cardImage = new Image(imagePath);
+            ImageView cardView = new ImageView(cardImage);
+            cardView.setFitWidth(100);
+            cardView.setFitHeight(150);
+            cardView.setPreserveRatio(true);
+            botHand1.getChildren().add(cardView);
+        }
+
+
+        for (Card card : game.getBotPlayer2().getPlayerHand()) {
+            String imagePath = getCardImagePath(card);
+            Image cardImage = new Image(imagePath);
+            ImageView cardView = new ImageView(cardImage);
+            cardView.setFitWidth(100);
+            cardView.setFitHeight(150);
+            cardView.setPreserveRatio(true);
+            botHand2.getChildren().add(cardView);
+        }
         for (Card card : game.getDealer().getPlayerHand()) {
             String imagePath = getCardImagePath(card);
             Image cardImage = new Image(imagePath);
-            dealerHandBox.getChildren().add(new ImageView(cardImage));
+            ImageView cardView = new ImageView(cardImage);
+            cardView.setFitWidth(100);
+            cardView.setFitHeight(150);
+            cardView.setPreserveRatio(true);
+            dealerHand.getChildren().add(cardView);
         }
         //int dealerScoreGet = game.getDealer().getPlayerHandTotal();
         //dealerScoreLabel.setText("Dealer Score: " + dealerScoreLabel);
@@ -141,20 +291,44 @@ public class MainApp extends Application {
         //        }
         // **//
 
+
+
+
     }
 
 
+
+
+
+
+
+
     //DIsplay image
-        //playerScoreLabel.setText("Player Score: " + player.getScore());
-        //dealerScoreLabel.setText("Dealer Score: " + dealer.getScore());
+    //playerScoreLabel.setText("Player Score: " + player.getScore());
+    //dealerScoreLabel.setText("Dealer Score: " + dealer.getScore());
 
 
 
 
-//GET THE CARD IMAGE FROM FILE
-private String getCardImagePath(Card card) {
-    String fileName = card.toString()+".png";// Call it cause structure the resoure filw name base on Sui + rank to make it match and call
-    return "resource/" + fileName;  }
+
+
+
+
+
+
+
+
+
+
+
+
+    //GET THE CARD IMAGE FROM FILE
+    private String getCardImagePath(Card card) {
+        String fileName = card.toString()+".png";// Call it cause structure the resoure filw name base on Sui + rank to make it match and call
+        return "resource/" + fileName;  }
+
+
+
 
     // End game
     private void endGame() {
@@ -168,10 +342,30 @@ private String getCardImagePath(Card card) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Getter for the VBox layout (required for Scene setup)
     public VBox getVBox() {
         return root;  // Return the root VBox containing the game UI
     }
-
 
 }
