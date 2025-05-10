@@ -45,7 +45,11 @@ Windows:
 
 ## Contributions
 ### Team Roles
-Member	Ownership Areas
-- Leon Burster - Game Manager & Auth System
+#### Member	Ownership Areas
+
+- Leon Burster - Game Manager & Auth System (Task 1 - 4):
+Login/SignUp, GameWindow, Data management (files: high_scores.txt, user_accounts.txt), unitTest -> userTest, Password hashing
+
 - [Name 2] - Blackjack Core Logic & GUI Design & Integration
+
 - Sokuntheary Em	- Snake Game Implementation & GUI Design & Integration
