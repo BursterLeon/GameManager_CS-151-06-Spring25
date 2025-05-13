@@ -6,6 +6,4 @@ import javafx.stage.Stage;
 
 public interface hasHBox {
     HBox getHBox();
-    Stage getStage();
-    VBox getVBox();
 }

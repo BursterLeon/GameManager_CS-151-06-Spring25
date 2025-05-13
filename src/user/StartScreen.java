@@ -47,7 +47,7 @@ public class StartScreen {
             nameField.clear();
             passwordField.clear();
             if (userAccount.getLoggedIn())
-                WindowManager.openWindowHBox(new GameWindow(userAccount),"GameWindow");
+                WindowManager.openWindow(new GameWindow(userAccount),"GameWindow");
         });
 
         //CREATE ACCOUNT

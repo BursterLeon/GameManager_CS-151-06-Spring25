@@ -11,20 +11,21 @@ public class WindowManager {
 
     public static void openWindow(GameManagerWindow gameManagerWindow,String title) {
         if (gameManagerWindow != null && !Utility.isNullOrWhiteSpace(title)) {
-            gameManagerWindow.getStage().setTitle(title);
+            if (gameManagerWindow instanceof hasHBox) {
 
-            Scene scene = new Scene(gameManagerWindow.getVBox(), 500, 500);
-            gameManagerWindow.getStage().setScene(scene);
-            gameManagerWindow.getStage().show();
-        }
-    }
-    public static void openWindowHBox(hasHBox gameManagerWindow,String title) {
-        if (gameManagerWindow != null && !Utility.isNullOrWhiteSpace(title) && gameManagerWindow instanceof GameManagerWindow) {
-            gameManagerWindow.getStage().setTitle(title);
+                gameManagerWindow.getStage().setTitle(title);
 
-            Scene scene = new Scene(gameManagerWindow.getHBox(), 500, 500);
-            gameManagerWindow.getStage().setScene(scene);
-            gameManagerWindow.getStage().show();
+                Scene scene = new Scene(((hasHBox)gameManagerWindow).getHBox(), 500, 500);
+                gameManagerWindow.getStage().setScene(scene);
+                gameManagerWindow.getStage().show();
+            }
+            else {
+                gameManagerWindow.getStage().setTitle(title);
+
+                Scene scene = new Scene(gameManagerWindow.getVBox(), 500, 500);
+                gameManagerWindow.getStage().setScene(scene);
+                gameManagerWindow.getStage().show();
+            }
         }
     }
     public static void closeWindow(GameManagerWindow gameManagerWindow) {
