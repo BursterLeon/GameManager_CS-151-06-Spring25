@@ -21,7 +21,7 @@ public abstract class Player {
 
         for(Card card : playerHand) {
             total += card.getRank().getValue();
-            if (card.getRank() == Rank.ACE) {
+            if (card.getRank() == Rank.A) {
                 ++aces;
             }
 
